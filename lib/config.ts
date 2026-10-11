@@ -1,31 +1,30 @@
 // Edit this file to personalise the invitation.
 export const wedding = {
-  groom: "Zayn",
-  bride: "Nora",
-  groomParents: "Mr. & Mrs. Ahmed",
-  brideParents: "Mr. & Mrs. Hassan",
-  // ISO local time of the ceremony
-  date: "2026-11-30T16:00:00",
-  dateLabel: "November 30, 2026",
-  venue: "Grand Palace Hall",
-  address: "123 Rosewood Avenue, Garden District, New York, NY 10001",
-  mapsQuery: "Grand Palace Hall, 123 Rosewood Avenue, New York, NY 10001",
+  groom: "Sai Kiran",
+  bride: "Asha",
+  groomParents: "Shri & Smt. Rajesh Sharma",
+  brideParents: "Shri & Smt. Vikram Iyer",
+  // ISO local time of the main ceremony (Shaadi)
+  date: "2026-12-12T19:00:00",
+  venue: "Rambagh Palace Gardens",
+  address: "Bhawani Singh Road, Jaipur, Rajasthan 302005",
+  mapsQuery: "Rambagh Palace, Jaipur",
 };
 
-export const photos = [
-  "/photos/1.svg",
-  "/photos/2.svg",
-  "/photos/3.svg",
-  "/photos/4.svg",
-]; // replace with your engagement photos (jpg/png/webp)
-
-export const timeline = [
-  { time: "3:30 PM", title: "Guest Arrival", text: "Welcome drinks in the courtyard.", icon: "arrival" },
-  { time: "4:00 PM", title: "Wedding Ceremony", text: "Exchange of vows beneath the fountain.", icon: "rings" },
-  { time: "6:30 PM", title: "Reception", text: "Dinner, toasts and dancing under the stars.", icon: "glass" },
-] as const;
-
-export const preEvents = [
-  { name: "Mahendi", date: "November 27, 2026", time: "5:00 PM", place: "The Rose Terrace, Garden District" },
-  { name: "Haldi", date: "November 28, 2026", time: "10:00 AM", place: "Bride's Family Residence" },
+export const events = [
+  { name: "Haldi", date: "10 December 2026", time: "10:00 AM", venue: "Asha's Family Residence, Jaipur", note: "Turmeric, laughter & yellow attire" },
+  { name: "Shaadi", date: "12 December 2026", time: "7:00 PM", venue: "Rambagh Palace Gardens, Jaipur", note: "Pheras beneath the mandap", featured: true },
+  { name: "Reception", date: "13 December 2026", time: "8:00 PM", venue: "The Grand Durbar Hall, Jaipur", note: "Dinner, music & celebration" },
 ];
+
+export const photos = [
+  { src: "/photos/1.svg", caption: "The first hello" },
+  { src: "/photos/2.svg", caption: "Chai & chatter" },
+  { src: "/photos/3.svg", caption: "The proposal" },
+  { src: "/photos/4.svg", caption: "Roka day" },
+]; // replace with real photos (jpg/png/webp) in /public/photos
+
+export const couple = {
+  groom: "A gentle soul with a booming laugh, Sai Kiran finds poetry in sunrise chai and cricket scores alike. He promises Asha a lifetime of adventures and terrible puns.",
+  bride: "Radiant, fearless and endlessly kind, Asha lights up every room she enters. Her love for classical dance and her grandmother's recipes is matched only by her love for Sai Kiran.",
+};
