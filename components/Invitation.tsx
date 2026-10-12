@@ -1,6 +1,8 @@
 import Fireworks from "./Fireworks";
 import CapName from "./CapName";
 import FlipWord from "./FlipWord";
+import FloralCorner from "./FloralCorner";
+import ScratchCard from "./ScratchCard";
 import { SectionTitle } from "./Reveal";
 import { couple, events, photos, wedding } from "@/lib/config";
 
@@ -12,6 +14,8 @@ function Hero() {
   const fade = "linear-gradient(to bottom, transparent 0%, #000 24%, #000 92%, transparent 100%)";
   return (
     <section className="relative overflow-hidden bg-ivory pt-8 text-center">
+      <FloralCorner />
+      <FloralCorner flip />
       <div className="relative z-10 flex flex-col items-center px-4">
         <p className="mb-3 text-[10px] font-medium uppercase tracking-[.4em] text-maroon">With Bappa&apos;s Blessings</p>
         <div className="flex items-baseline justify-center gap-2 whitespace-nowrap pl-3 text-[clamp(28px,8.8vw,40px)] leading-none">
@@ -33,19 +37,19 @@ function Hero() {
 
 function Welcome() {
   return (
-    <section className="px-5 pt-12">
-      <div className="glass rounded-[2rem] px-6 py-8 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 font-script text-lg text-gold-dark">
+    <section className="px-8 pt-8">
+      <div className="glass rounded-3xl px-5 py-5 text-center">
+        <div className="mx-auto flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 font-script text-sm text-gold-dark">
           {initials}
         </div>
-        <p className="mt-4 text-[10px] uppercase tracking-[.35em] text-gold-dark">Together with their families</p>
-        <h2 className="gold-text mt-1 font-script text-6xl">Welcome</h2>
-        <p className="mt-3 font-serif text-lg leading-relaxed text-maroon-deep">
+        <p className="mt-2 text-[9px] uppercase tracking-[.3em] text-gold-dark">Together with their families</p>
+        <h2 className="gold-text font-script text-4xl leading-tight">Welcome</h2>
+        <p className="mt-1.5 font-serif text-[15px] leading-snug text-maroon-deep">
           With the blessings of Lord Ganesha and our elders, we joyfully invite you to share in the wedding of our children.
         </p>
-        <div className="mt-5 grid grid-cols-2 gap-3 border-t border-gold/30 pt-4 text-sm">
-          <div><p className="text-[10px] uppercase tracking-[.2em] text-gold-dark">Groom&apos;s family</p><p className="mt-1 font-serif text-maroon-deep">{wedding.groomParents}</p></div>
-          <div><p className="text-[10px] uppercase tracking-[.2em] text-gold-dark">Bride&apos;s family</p><p className="mt-1 font-serif text-maroon-deep">{wedding.brideParents}</p></div>
+        <div className="mt-3 grid grid-cols-2 gap-2 border-t border-gold/30 pt-2.5 text-xs">
+          <div><p className="text-[9px] uppercase tracking-[.15em] text-gold-dark">Groom&apos;s family</p><p className="mt-0.5 font-serif text-[13px] leading-snug text-maroon-deep">{wedding.groomParents}</p></div>
+          <div><p className="text-[9px] uppercase tracking-[.15em] text-gold-dark">Bride&apos;s family</p><p className="mt-0.5 font-serif text-[13px] leading-snug text-maroon-deep">{wedding.brideParents}</p></div>
         </div>
       </div>
     </section>
@@ -134,6 +138,7 @@ export default function Invitation() {
     <>
       <Hero />
       <Welcome />
+      <ScratchCard />
       <Celebrations />
       <MeetCouple />
       <Gallery />
