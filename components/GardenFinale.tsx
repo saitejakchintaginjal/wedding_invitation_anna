@@ -1,5 +1,6 @@
 "use client";
 
+import CapName from "./CapName";
 import Countdown from "./Countdown";
 import { SectionTitle } from "./Reveal";
 import { events, venues, wedding } from "@/lib/config";
@@ -70,9 +71,9 @@ export default function GardenFinale() {
 
       <footer className="text-center">
         <p className="flex items-center justify-center gap-1.5 whitespace-nowrap pt-5 font-script text-[clamp(30px,10.5vw,48px)] leading-[1.5]">
-          <span className="gold-text px-1 pt-2">{wedding.groom}</span>
+          <span className="gold-text px-1 pt-2"><CapName>{wedding.groom}</CapName></span>
           <span className="text-[.7em] text-ruby drop-shadow-[0_2px_4px_rgba(179,18,46,.35)]" aria-label="and">♥</span>
-          <span className="gold-text px-1 pt-2">{wedding.bride}</span>
+          <span className="gold-text px-1 pt-2"><CapName>{wedding.bride}</CapName></span>
         </p>
         <p className="mt-2 text-xs font-medium uppercase tracking-[.3em] text-maroon">With love, always</p>
       </footer>

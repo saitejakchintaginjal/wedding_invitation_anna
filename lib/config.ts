@@ -1,6 +1,6 @@
 // Edit this file to personalise the invitation.
 export const wedding = {
-  groom: "Sai Kiran",
+  groom: "SaiKiran",
   bride: "Asha",
   groomParents: "Smt. Krishnaveni K C",
   brideParents: "Mr. & Mrs. Butta",

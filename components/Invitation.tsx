@@ -6,7 +6,6 @@ import ScratchCard from "./ScratchCard";
 import { SectionTitle } from "./Reveal";
 import { events, photos, wedding } from "@/lib/config";
 
-const initials = `${wedding.groom[0]} & ${wedding.bride[0]}`;
 
 function Hero() {
   const name = "font-script text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.95)]";
@@ -53,7 +52,7 @@ function Hero() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/hero-couple.png"
-          alt="Sai Kiran and Asha holding hands before the temple mandap"
+          alt="SaiKiran and Asha holding hands before the temple mandap"
           className="seq-couple absolute h-auto"
           style={{ left: "35.84%", top: "31.67%", width: "35.64%" }}
         />
@@ -68,8 +67,10 @@ function Welcome() {
   return (
     <section className="px-8 pt-8">
       <ScrollReveal className="rounded-3xl border border-gold/20 bg-gradient-to-b from-white/25 to-white/45 px-5 py-5 text-center shadow-[0_10px_40px_rgba(212,164,57,.14)] backdrop-blur-[2px]">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 pb-0.5 font-script text-[17px] leading-none tracking-tight text-gold-dark shadow-[inset_0_0_0_3px_rgba(255,247,234,.9),inset_0_0_0_4px_rgba(184,134,11,.35)]">
-          {initials}
+        <div className="mx-auto flex h-16 w-16 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 pb-0.5 font-script text-[16px] leading-none tracking-tight text-gold-dark shadow-[inset_0_0_0_3px_rgba(255,247,234,.9),inset_0_0_0_4px_rgba(184,134,11,.35)]">
+          <CapName>{wedding.groom[0]}</CapName>
+          <span className="mx-0.5 text-[1.15em] text-ruby" aria-label="and">♥</span>
+          <CapName>{wedding.bride[0]}</CapName>
         </div>
         <p className="mt-2 text-[9px] uppercase tracking-[.3em] text-gold-dark">Together with their families</p>
         <h2 className="gold-text font-script text-4xl leading-tight">Welcome</h2>
@@ -127,12 +128,12 @@ function MeetCouple() {
       <ScrollReveal>
         <div className="ornate-frame tap-lift mx-auto aspect-[2/3] w-[76%] overflow-hidden rounded-t-[999px] bg-night shadow-[0_18px_40px_rgba(90,30,20,.35)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
+          <img src="/couple.png" alt="SaiKiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
         </div>
       </ScrollReveal>
       <div className="mt-6 grid grid-cols-2 gap-4">
         {[
-          { src: "/groom.jpg", name: wedding.groom, role: "The Groom", pos: "50% 22%" },
+          { src: "/groom.jpg", name: wedding.groom, role: "The Groom", pos: "50% 12%" },
           { src: "/bride.jpg", name: wedding.bride, role: "The Bride", pos: "62% 12%" },
         ].map((p, i) => (
           <ScrollReveal key={p.role} delay={i * 0.12}>
@@ -143,7 +144,7 @@ function MeetCouple() {
               </div>
               <figcaption className="mt-2">
                 <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">{p.role}</p>
-                <p className="font-script text-3xl leading-tight text-maroon-deep">{p.name}</p>
+                <p className="font-script text-3xl leading-tight text-maroon-deep"><CapName>{p.name}</CapName></p>
               </figcaption>
             </figure>
           </ScrollReveal>
@@ -175,7 +176,7 @@ function Childhood() {
             <figure className="tap-lift relative bg-ivory p-2 pb-12 shadow-[0_14px_28px_rgba(90,30,20,.3)]" style={{ transform: `rotate(${k.rot}deg)` }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={k.src} alt={`${k.name} as a child`} className="aspect-[4/5] w-full object-cover" style={{ objectPosition: k.pos }} />
-              <figcaption className="absolute inset-x-0 bottom-1.5 text-center font-script text-2xl leading-none text-maroon">{k.name}</figcaption>
+              <figcaption className="absolute inset-x-0 bottom-1.5 text-center font-script text-2xl leading-none text-maroon"><CapName>{k.name}</CapName></figcaption>
             </figure>
           </ScrollReveal>
         ))}

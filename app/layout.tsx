@@ -8,7 +8,7 @@ const display = Satisfy({ subsets: ["latin"], weight: "400", variable: "--font-d
 const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Saikiran & Asha - Wedding Invitation",
+  title: "SaiKiran & Asha - Wedding Invitation",
   description: "You are invited to celebrate our wedding.",
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#fff7ea" };
