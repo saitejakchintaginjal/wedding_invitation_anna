@@ -7,58 +7,59 @@ import { SectionTitle } from "./Reveal";
 import { events, photos, wedding } from "@/lib/config";
 
 
+// Bells are cut out of the illustration (see public/bells) and swung from the point they hang. x/y/w/h/px/py are in the
+// illustration's own pixels (765 x 1024); px/py is the pivot inside each bell sprite.
+const BELLS = [
+  { id: "a", x: 50, y: 170, w: 48, h: 86, px: 28, py: 2, amp: 5.5, dur: 3.6, delay: 0 },
+  { id: "b", x: 98, y: 262, w: 48, h: 52, px: 24, py: 4, amp: 8, dur: 2.7, delay: 0.4 },
+  { id: "c", x: 594, y: 266, w: 49, h: 56, px: 24, py: 4, amp: 8, dur: 3.1, delay: 0.9 },
+  { id: "d", x: 646, y: 160, w: 44, h: 98, px: 21, py: 2, amp: 5.5, dur: 3.9, delay: 0.2 },
+];
+
 function Hero() {
-  const name = "font-script text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.95)]";
-  // only the empty sky at the top of the photo dissolves into the page; the temple and couple stay untouched
-  const fade = "linear-gradient(to bottom, transparent 0%, #000 24%, #000 92%, transparent 100%)";
-  // sunrise colour splashed over the sky: soft blobs that burst open one after another (multiply keeps them pastel on the pale sky)
-  const splashes = [
-    { l: -12, t: -22, w: 74, h: 84, c: "rgba(190,160,238,.95)" },
-    { l: 34, t: -18, w: 78, h: 76, c: "rgba(255,148,184,.95)" },
-    { l: 58, t: 22, w: 62, h: 74, c: "rgba(255,176,106,.9)" },
-    { l: -10, t: 28, w: 62, h: 74, c: "rgba(255,138,138,.85)" },
-    { l: 24, t: 48, w: 66, h: 62, c: "rgba(255,214,118,.85)" },
-    { l: 66, t: -14, w: 48, h: 56, c: "rgba(232,140,222,.85)" },
-  ];
+  const name = "font-script text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.9)]";
+  // the illustration shows in full at the top; only its bottom edge dissolves into the ivory page
+  const fade = "linear-gradient(to bottom, transparent 0%, #000 1.8%, #000 93%, transparent 100%)";
   return (
-    <section className="relative overflow-hidden bg-ivory pt-8 text-center">
-      {/* the names rise from behind the mandap (see .seq-names in globals.css) */}
-      <div className="seq-names relative z-10 flex flex-col items-center px-4">
-        <div className="mb-3 space-y-0.5 font-serif text-[12.5px] font-semibold leading-snug tracking-[.06em] text-maroon">
-          <p>|| Shree Venkateshwara Swamy Prasanna ||</p>
-          <p>|| Shree Banashankari Devi Prasanna ||</p>
-          <p>|| Shree Yelumakkala Tayi Prasanna ||</p>
-        </div>
-        <div className="flex items-baseline justify-center gap-2 whitespace-nowrap pl-3 text-[clamp(28px,8.8vw,40px)] leading-none">
-          <CapName className={name}>{wedding.groom}</CapName>
-          <FlipWord className="font-script text-[.95em] text-ruby drop-shadow-[0_0_8px_rgba(255,247,234,.95)]" />
-          <CapName className={name}>{wedding.bride}</CapName>
-        </div>
+    <section className="relative overflow-hidden bg-ivory pt-5 text-center">
+      <div className="relative z-10 space-y-0.5 px-4 pb-2 font-serif text-[12.5px] font-semibold leading-snug tracking-[.06em] text-maroon">
+        <p>|| Shree Venkateshwara Swamy Prasanna ||</p>
+        <p>|| Shree Banashankari Devi Prasanna ||</p>
+        <p>|| Shree Yelumakkala Tayi Prasanna ||</p>
       </div>
 
-      {/* the scene is two layers (setting + couple) that fade in together */}
-      <div className="relative z-[1] -mt-6" style={{ WebkitMaskImage: fade, maskImage: fade }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero-bg.jpg" alt="" className="seq-bg block h-auto w-full" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[48%] [mix-blend-mode:multiply]" aria-hidden>
-          {splashes.map((b, i) => (
-            <span
-              key={i}
-              className="splash absolute"
-              style={{ left: `${b.l}%`, top: `${b.t}%`, width: `${b.w}%`, height: `${b.h}%`, background: `radial-gradient(closest-side, ${b.c}, transparent)`, ["--sd" as string]: `${2 + i * 0.22}s`, ["--sdur" as string]: `${4.4 + i * 0.7}s` }}
-            />
-          ))}
-        </div>
+      <div className="relative" style={{ WebkitMaskImage: fade, maskImage: fade }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/hero-couple.png"
-          alt="SaiKiran and Asha holding hands before the temple mandap"
-          className="seq-couple absolute h-auto"
-          style={{ left: "35.84%", top: "31.67%", width: "35.64%" }}
+          src="/hero-temple.jpg"
+          alt="SaiKiran and Asha walking hand in hand towards the temple"
+          className="seq-bg block h-auto w-full"
         />
+        {BELLS.map((b) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={b.id}
+            src={`/bells/${b.id}.png`}
+            alt=""
+            aria-hidden
+            className="bell pointer-events-none absolute"
+            style={{
+              left: `${(b.x / 765) * 100}%`, top: `${(b.y / 1024) * 100}%`, width: `${(b.w / 765) * 100}%`,
+              ["--ox" as string]: `${(b.px / b.w) * 100}%`, ["--oy" as string]: `${(b.py / b.h) * 100}%`,
+              ["--a" as string]: `${b.amp}deg`, ["--dur" as string]: `${b.dur}s`, ["--bd" as string]: `${b.delay}s`,
+            }}
+          />
+        ))}
+        {/* names sit in the clear sky between the hanging garlands, above the temple spire */}
+        <div className="seq-names absolute inset-x-0 top-[24%] flex justify-center">
+          <div className="flex items-baseline justify-center gap-1.5 whitespace-nowrap text-[clamp(22px,6.8vw,34px)] leading-none">
+            <CapName className={name}>{wedding.groom}</CapName>
+            <FlipWord className="font-script text-[.95em] text-ruby drop-shadow-[0_0_8px_rgba(255,247,234,.95)]" />
+            <CapName className={name}>{wedding.bride}</CapName>
+          </div>
+        </div>
         <div className="seq-fx absolute inset-0"><Fireworks light startAfter={{ htmlClass: "revealed", ms: 2800 }} /></div>
       </div>
-      <div className="pb-3" />
     </section>
   );
 }
