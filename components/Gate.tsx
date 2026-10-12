@@ -20,7 +20,10 @@ export default function Gate() {
   const start = () => {
     if (phase !== "closed") return;
     setPhase("card");
-    setTimeout(() => setPhase("curtain"), 1500);
+    setTimeout(() => {
+      setPhase("curtain");
+      document.documentElement.classList.add("revealed"); // starts the walk-through and the blooming corners
+    }, 1500);
     setTimeout(() => setPhase("open"), 5600);
   };
 

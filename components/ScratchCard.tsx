@@ -145,7 +145,7 @@ export default function ScratchCard() {
               <p className="gold-text font-serif text-[44px] font-semibold leading-none">{d}</p>
               <p className="font-serif text-sm font-semibold uppercase tracking-[.22em] text-maroon-deep">{MONTHS[m - 1]}</p>
               <p className="font-serif text-xs tracking-[.3em] text-maroon">{y}</p>
-              {shaadi && <p className="mt-0.5 text-[8px] uppercase tracking-[.2em] text-gold-dark">{shaadi.time}</p>}
+              {shaadi?.time && <p className="mt-0.5 text-[8px] uppercase tracking-[.2em] text-gold-dark">{shaadi.time}</p>}
             </div>
 
             {/* the foil */}

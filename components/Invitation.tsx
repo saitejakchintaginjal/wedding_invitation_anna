@@ -1,7 +1,7 @@
 import Fireworks from "./Fireworks";
 import CapName from "./CapName";
 import FlipWord from "./FlipWord";
-import FloralCorner from "./FloralCorner";
+import ScrollReveal from "./ScrollReveal";
 import ScratchCard from "./ScratchCard";
 import { SectionTitle } from "./Reveal";
 import { couple, events, photos, wedding } from "@/lib/config";
@@ -14,8 +14,6 @@ function Hero() {
   const fade = "linear-gradient(to bottom, transparent 0%, #000 24%, #000 92%, transparent 100%)";
   return (
     <section className="relative overflow-hidden bg-ivory pt-8 text-center">
-      <FloralCorner />
-      <FloralCorner flip />
       <div className="relative z-10 flex flex-col items-center px-4">
         <p className="mb-3 text-[10px] font-medium uppercase tracking-[.4em] text-maroon">With Bappa&apos;s Blessings</p>
         <div className="flex items-baseline justify-center gap-2 whitespace-nowrap pl-3 text-[clamp(28px,8.8vw,40px)] leading-none">
@@ -30,7 +28,7 @@ function Hero() {
         <img src="/home.jpg" alt="Sai Kiran and Asha holding hands before the temple mandap" className="block h-auto w-full" />
         <div className="absolute inset-0"><Fireworks light /></div>
       </div>
-      <p className="pb-3 pt-1 text-[10px] uppercase tracking-[.4em] text-maroon/70">Scroll ⌄</p>
+      <div className="pb-3" />
     </section>
   );
 }
@@ -38,7 +36,7 @@ function Hero() {
 function Welcome() {
   return (
     <section className="px-8 pt-8">
-      <div className="glass rounded-3xl px-5 py-5 text-center">
+      <ScrollReveal className="rounded-3xl border border-gold/20 bg-gradient-to-b from-white/25 to-white/45 px-5 py-5 text-center shadow-[0_10px_40px_rgba(212,164,57,.14)] backdrop-blur-[2px]">
         <div className="mx-auto flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 font-script text-sm text-gold-dark">
           {initials}
         </div>
@@ -51,7 +49,7 @@ function Welcome() {
           <div><p className="text-[9px] uppercase tracking-[.15em] text-gold-dark">Groom&apos;s family</p><p className="mt-0.5 font-serif text-[13px] leading-snug text-maroon-deep">{wedding.groomParents}</p></div>
           <div><p className="text-[9px] uppercase tracking-[.15em] text-gold-dark">Bride&apos;s family</p><p className="mt-0.5 font-serif text-[13px] leading-snug text-maroon-deep">{wedding.brideParents}</p></div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
@@ -61,13 +59,13 @@ function Celebrations() {
     <section className="px-5 pt-12">
       <SectionTitle eyebrow="Save the dates" title="The Celebrations" />
       <div className="space-y-4">
-        {events.map((e) => {
+        {events.map((e, i) => {
           const featured = "featured" in e && e.featured;
           const [day, month, year] = e.date.split(" ");
           return (
+            <ScrollReveal key={e.name} delay={i * 0.12}>
             <article
-              key={e.name}
-              className={`glass relative flex items-center gap-4 rounded-3xl p-4 ${featured ? "!border-gold-dark/80 bg-gradient-to-br from-ruby/15 to-saffron/20" : ""}`}
+              className={`glass tap-lift relative flex items-center gap-4 rounded-3xl p-4 ${featured ? "!border-gold-dark/80 bg-gradient-to-br from-ruby/15 to-saffron/20" : ""}`}
             >
               {featured && (
                 <span className="gold-btn absolute -top-2.5 right-5 rounded-full px-3 py-1 text-[9px] font-medium">MAIN EVENT</span>
@@ -78,10 +76,11 @@ function Celebrations() {
               </div>
               <div className="min-w-0 flex-1 border-l border-gold/40 pl-4">
                 <h3 className="gold-text font-script text-3xl leading-tight">{e.name}</h3>
-                <p className="mt-0.5 inline-block rounded-full border border-gold-dark/40 px-3 py-0.5 text-[11px] uppercase tracking-[.2em] text-gold-dark">{e.time}</p>
+                {e.timeLabel && <p className="mt-0.5 inline-block rounded-full border border-gold-dark/40 px-3 py-0.5 text-[11px] uppercase tracking-[.2em] text-gold-dark">{e.timeLabel}</p>}
                 <p className="mt-1.5 text-xs text-maroon/90">📍 {e.venue}</p>
               </div>
             </article>
+            </ScrollReveal>
           );
         })}
       </div>
@@ -94,21 +93,23 @@ function MeetCouple() {
   return (
     <section className="px-5 pt-12">
       <SectionTitle eyebrow="Meet the" title="Bride & Groom" />
-      <div className="ornate-frame mx-auto aspect-[2/3] w-[76%] overflow-hidden rounded-t-[999px] bg-night shadow-[0_18px_40px_rgba(90,30,20,.35)]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
-      </div>
+      <ScrollReveal>
+        <div className="ornate-frame tap-lift mx-auto aspect-[2/3] w-[76%] overflow-hidden rounded-t-[999px] bg-night shadow-[0_18px_40px_rgba(90,30,20,.35)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
+        </div>
+      </ScrollReveal>
       <div className="mt-6 space-y-4">
-        <div className={block}>
+        <ScrollReveal><div className={`${block} tap-lift`}>
           <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">The groom</p>
           <h3 className="font-serif text-3xl font-semibold text-maroon-deep">{wedding.groom}</h3>
           <p className="mt-1 font-serif text-base leading-relaxed text-maroon/90">{couple.groom}</p>
-        </div>
-        <div className={`${block} text-right`}>
+        </div></ScrollReveal>
+        <ScrollReveal delay={0.12}><div className={`${block} tap-lift text-right`}>
           <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">The bride</p>
           <h3 className="font-serif text-3xl font-semibold text-maroon-deep">{wedding.bride}</h3>
           <p className="mt-1 font-serif text-base leading-relaxed text-maroon/90">{couple.bride}</p>
-        </div>
+        </div></ScrollReveal>
       </div>
     </section>
   );
@@ -122,11 +123,16 @@ function Gallery() {
       <SectionTitle eyebrow="Our story, so far" title="Moments" />
       <div className="grid grid-cols-2 gap-5">
         {photos.map((ph, i) => (
-          <figure key={ph.src} className="relative bg-ivory p-2 pb-8 shadow-[0_14px_28px_rgba(90,30,20,.3)]" style={{ transform: `rotate(${ROT[i % ROT.length]}deg)` }}>
+          <ScrollReveal key={ph.src} delay={(i % 2) * 0.12}>
+          <figure
+            className="relative bg-ivory p-2 pb-8 shadow-[0_14px_28px_rgba(90,30,20,.3)] transition-transform duration-300 [transform:rotate(var(--r))] hover:z-10 hover:[transform:rotate(0deg)_scale(1.06)] active:[transform:rotate(0deg)_scale(1.06)]"
+            style={{ ["--r" as string]: `${ROT[i % ROT.length]}deg` }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={ph.src} alt={ph.caption} className="aspect-[4/5] w-full object-cover" />
             <figcaption className="absolute inset-x-0 bottom-1 text-center font-script text-xl text-maroon">{ph.caption}</figcaption>
           </figure>
+          </ScrollReveal>
         ))}
       </div>
     </section>

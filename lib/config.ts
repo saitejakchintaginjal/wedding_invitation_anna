@@ -2,19 +2,18 @@
 export const wedding = {
   groom: "Sai Kiran",
   bride: "Asha",
-  groomParents: "Shri & Smt. Rajesh Sharma",
-  brideParents: "Shri & Smt. Vikram Iyer",
-  // ISO local time of the main ceremony (Shaadi)
-  date: "2026-12-12T19:00:00",
-  venue: "Rambagh Palace Gardens",
-  address: "Bhawani Singh Road, Jaipur, Rajasthan 302005",
-  mapsQuery: "Rambagh Palace, Jaipur",
+  groomParents: "Smt. Krishnaveni K C",
+  brideParents: "Mr. & Mrs. Butta",
+  // ISO local time of the wedding muhurtam
+  date: "2026-11-26T09:41:00",
+  venue: "Shri Venkataramana Temple",
+  address: "Shri Kshetra Manjuguni, Sirsi",
+  mapsQuery: "Shri Venkataramana Temple, Manjuguni, Sirsi",
 };
 
 export const events = [
-  { name: "Haldi", date: "10 December 2026", time: "10:00 AM", venue: "Asha's Family Residence, Jaipur", note: "Turmeric, laughter & yellow attire" },
-  { name: "Shaadi", date: "12 December 2026", time: "7:00 PM", venue: "Rambagh Palace Gardens, Jaipur", note: "Pheras beneath the mandap", featured: true },
-  { name: "Reception", date: "13 December 2026", time: "8:00 PM", venue: "The Grand Durbar Hall, Jaipur", note: "Dinner, music & celebration" },
+  { name: "Wedding", date: "26 November 2026", time: "9:41 AM", timeLabel: "Muhurtam · 9:41 AM", venue: "Shri Venkataramana Temple, Shri Kshetra Manjuguni, Sirsi", note: "", featured: true },
+  { name: "Reception", date: "28 November 2026", time: "12:00 PM", timeLabel: "12:00 PM onwards", venue: "SSK Function Hall", note: "" },
 ];
 
 export const photos = [
