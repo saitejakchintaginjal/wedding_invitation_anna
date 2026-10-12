@@ -58,12 +58,20 @@ input, select, textarea { font-size: 16px; } /* prevent iOS zoom */
 }
 
 /* ---- after the gate: walk-through, blooming corners, scroll reveals ---- */
+/* camera moving in: the scene starts small, beyond the curtain, and grows as the camera approaches */
 @keyframes walkIn {
-  0% { transform: scale(1.4) translateY(3%); filter: blur(7px); opacity: .25; }
-  60% { filter: blur(1.5px); opacity: 1; }
-  100% { transform: none; filter: none; opacity: 1; }
+  0% { transform: scale(.78) translateY(2%); filter: blur(3px); }
+  100% { transform: none; filter: none; }
 }
-html.revealed .walk { animation: walkIn 4.6s cubic-bezier(.22,.7,.25,1) backwards; transform-origin: 50% 12%; }
+html.revealed .walk { animation: walkIn 3.8s cubic-bezier(.45,.05,.35,1) 1.3s backwards; transform-origin: 50% 25%; }
+
+/* the curtain frame grows past the edges of the screen, accelerating, so the curtains slide off to the sides */
+@keyframes curtainPass {
+  0% { transform: scale(1); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+.curtain-pass { transform-origin: 50% 42%; animation: curtainPass 3.5s cubic-bezier(.55,.05,.85,.55) 1.5s forwards; }
 
 @keyframes bloom {
   0% { opacity: 0; transform: scale(.3) rotate(var(--bloom-r, -12deg)); }
@@ -84,7 +92,50 @@ html.revealed .bloom { animation: bloom 1.5s cubic-bezier(.2,.8,.3,1) var(--bloo
 }
 .petal { position: fixed; z-index: 60; pointer-events: none; font-size: 18px; animation: petalRise 1.1s ease-out forwards; }
 
+/* hero sequence, timed from the moment the curtain starts to open:
+   scene and couple together 1.2s -> sky colour splashes 2s -> names 4.8s -> corner flowers 7.2s+ (see CornerFlowers) */
+@keyframes seqFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes namesRise {
+  /* starts hidden behind the temple (z-index under the scene), then steps in front once it clears the roofline */
+  0% { transform: translateY(min(34vw, 165px)) scale(.82); opacity: 0; z-index: 0; }
+  14% { opacity: 1; }
+  74% { z-index: 0; }
+  75% { z-index: 10; }
+  100% { transform: none; opacity: 1; z-index: 10; }
+}
+html.revealed .seq-bg, html.revealed .seq-couple { animation: seqFade 1.6s ease-out 1.2s backwards; }
+@keyframes splashPulse {
+  0%, 100% { transform: scale(.9); opacity: .55; }
+  35% { transform: scale(1.22) rotate(6deg); opacity: 1; }
+  70% { transform: scale(1.02) rotate(-4deg); opacity: .8; }
+}
+html.revealed .splash {
+  animation:
+    splash 1.2s cubic-bezier(.16,1.15,.3,1) var(--sd, 2s) backwards,
+    splashPulse var(--sdur, 5s) ease-in-out calc(var(--sd, 2s) + 1.2s) infinite;
+}
+@keyframes splash {
+  0% { transform: scale(.05); opacity: 0; }
+  45% { opacity: 1; }
+  70% { transform: scale(1.14); }
+  100% { transform: none; opacity: 1; }
+}
+html.revealed .seq-names { animation: namesRise 2.4s cubic-bezier(.22,.8,.3,1) 4.8s backwards; }
+html.revealed .seq-fx { animation: seqFade 2s ease 5.2s backwards; }
+
+/* gate lock: gentle sway while it waits, then the shackle pops open and the whole lock drops away */
+@keyframes lockSway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes lockGlow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(255,225,140,0)); } 50% { filter: drop-shadow(0 0 14px rgba(255,225,140,.9)); } }
+@keyframes lockDrop { 0%, 55% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(46px) rotate(12deg); opacity: 0; } }
+.lock { transform-origin: 50% 0; }
+.lock-idle { animation: lockSway 3s ease-in-out infinite, lockGlow 2.4s ease-in-out infinite; }
+.lock-open { animation: lockDrop 1s ease-in forwards; }
+.lock-shackle { transform-box: fill-box; transform-origin: 100% 100%; transition: transform .45s cubic-bezier(.3,1.5,.5,1); }
+.lock-open .lock-shackle { transform: translateY(-15px) rotate(-38deg); }
+
 @media (prefers-reduced-motion: reduce) {
-  html.revealed .walk, html.revealed .bloom { animation: none; opacity: 1; }
+  html.revealed .walk, html.revealed .bloom, html.revealed .seq-bg, html.revealed .seq-couple, html.revealed .splash, html.revealed .seq-names, html.revealed .seq-fx { animation: none; opacity: 1; }
+  .lock-idle, .curtain-pass { animation: none; }
+  .curtain-pass { opacity: 0; }
   .sr { opacity: 1; transform: none; transition: none; }
 }

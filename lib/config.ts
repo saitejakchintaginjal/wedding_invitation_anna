@@ -22,8 +22,3 @@ export const photos = [
   { src: "/photos/3.svg", caption: "The proposal" },
   { src: "/photos/4.svg", caption: "Roka day" },
 ]; // replace with real photos (jpg/png/webp) in /public/photos
-
-export const couple = {
-  groom: "A gentle soul with a booming laugh, Sai Kiran finds poetry in sunrise chai and cricket scores alike. He promises Asha a lifetime of adventures and terrible puns.",
-  bride: "Radiant, fearless and endlessly kind, Asha lights up every room she enters. Her love for classical dance and her grandmother's recipes is matched only by her love for Sai Kiran.",
-};

@@ -4,7 +4,7 @@ import FlipWord from "./FlipWord";
 import ScrollReveal from "./ScrollReveal";
 import ScratchCard from "./ScratchCard";
 import { SectionTitle } from "./Reveal";
-import { couple, events, photos, wedding } from "@/lib/config";
+import { events, photos, wedding } from "@/lib/config";
 
 const initials = `${wedding.groom[0]} & ${wedding.bride[0]}`;
 
@@ -12,10 +12,24 @@ function Hero() {
   const name = "font-script text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.95)]";
   // only the empty sky at the top of the photo dissolves into the page; the temple and couple stay untouched
   const fade = "linear-gradient(to bottom, transparent 0%, #000 24%, #000 92%, transparent 100%)";
+  // sunrise colour splashed over the sky: soft blobs that burst open one after another (multiply keeps them pastel on the pale sky)
+  const splashes = [
+    { l: -12, t: -22, w: 74, h: 84, c: "rgba(190,160,238,.95)" },
+    { l: 34, t: -18, w: 78, h: 76, c: "rgba(255,148,184,.95)" },
+    { l: 58, t: 22, w: 62, h: 74, c: "rgba(255,176,106,.9)" },
+    { l: -10, t: 28, w: 62, h: 74, c: "rgba(255,138,138,.85)" },
+    { l: 24, t: 48, w: 66, h: 62, c: "rgba(255,214,118,.85)" },
+    { l: 66, t: -14, w: 48, h: 56, c: "rgba(232,140,222,.85)" },
+  ];
   return (
     <section className="relative overflow-hidden bg-ivory pt-8 text-center">
-      <div className="relative z-10 flex flex-col items-center px-4">
-        <p className="mb-3 text-[10px] font-medium uppercase tracking-[.4em] text-maroon">With Bappa&apos;s Blessings</p>
+      {/* the names rise from behind the mandap (see .seq-names in globals.css) */}
+      <div className="seq-names relative z-10 flex flex-col items-center px-4">
+        <div className="mb-3 space-y-0.5 font-serif text-[12.5px] font-semibold leading-snug tracking-[.06em] text-maroon">
+          <p>|| Shree Venkateshwara Swamy Prasanna ||</p>
+          <p>|| Shree Banashankari Devi Prasanna ||</p>
+          <p>|| Shree Yelumakkala Tayi Prasanna ||</p>
+        </div>
         <div className="flex items-baseline justify-center gap-2 whitespace-nowrap pl-3 text-[clamp(28px,8.8vw,40px)] leading-none">
           <CapName className={name}>{wedding.groom}</CapName>
           <FlipWord className="font-script text-[.95em] text-ruby drop-shadow-[0_0_8px_rgba(255,247,234,.95)]" />
@@ -23,10 +37,27 @@ function Hero() {
         </div>
       </div>
 
-      <div className="relative -mt-6" style={{ WebkitMaskImage: fade, maskImage: fade }}>
+      {/* the scene is two layers (setting + couple) that fade in together */}
+      <div className="relative z-[1] -mt-6" style={{ WebkitMaskImage: fade, maskImage: fade }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/home.jpg" alt="Sai Kiran and Asha holding hands before the temple mandap" className="block h-auto w-full" />
-        <div className="absolute inset-0"><Fireworks light /></div>
+        <img src="/hero-bg.jpg" alt="" className="seq-bg block h-auto w-full" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[48%] [mix-blend-mode:multiply]" aria-hidden>
+          {splashes.map((b, i) => (
+            <span
+              key={i}
+              className="splash absolute"
+              style={{ left: `${b.l}%`, top: `${b.t}%`, width: `${b.w}%`, height: `${b.h}%`, background: `radial-gradient(closest-side, ${b.c}, transparent)`, ["--sd" as string]: `${2 + i * 0.22}s`, ["--sdur" as string]: `${4.4 + i * 0.7}s` }}
+            />
+          ))}
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero-couple.png"
+          alt="Sai Kiran and Asha holding hands before the temple mandap"
+          className="seq-couple absolute h-auto"
+          style={{ left: "35.84%", top: "31.67%", width: "35.64%" }}
+        />
+        <div className="seq-fx absolute inset-0"><Fireworks light /></div>
       </div>
       <div className="pb-3" />
     </section>
@@ -99,18 +130,14 @@ function MeetCouple() {
           <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
         </div>
       </ScrollReveal>
-      <div className="mt-6 space-y-4">
-        <ScrollReveal><div className={`${block} tap-lift`}>
-          <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">The groom</p>
-          <h3 className="font-serif text-3xl font-semibold text-maroon-deep">{wedding.groom}</h3>
-          <p className="mt-1 font-serif text-base leading-relaxed text-maroon/90">{couple.groom}</p>
-        </div></ScrollReveal>
-        <ScrollReveal delay={0.12}><div className={`${block} tap-lift text-right`}>
-          <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">The bride</p>
-          <h3 className="font-serif text-3xl font-semibold text-maroon-deep">{wedding.bride}</h3>
-          <p className="mt-1 font-serif text-base leading-relaxed text-maroon/90">{couple.bride}</p>
-        </div></ScrollReveal>
-      </div>
+      <ScrollReveal delay={0.1}>
+        <div className={`${block} tap-lift mt-6 text-center`}>
+          <p className="font-script text-4xl leading-tight text-gold-dark">Two hearts, one journey</p>
+          <p className="mt-1.5 font-serif text-base leading-relaxed text-maroon/90">
+            Two souls, two families, one beautiful beginning. We would be honoured to have you with us as we start a lifetime of love, laughter and togetherness.
+          </p>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }
