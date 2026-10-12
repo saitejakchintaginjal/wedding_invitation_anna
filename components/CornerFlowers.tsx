@@ -9,14 +9,14 @@ const CORNERS = [
 
 export default function CornerFlowers() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-40 h-screen overflow-hidden [transform:translateZ(0)]">
       {CORNERS.map((c) => (
         <div key={c.pos} className={`absolute ${c.pos} ${c.flip}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/floral-corner.png"
             alt=""
-            className="bloom h-auto w-[clamp(84px,22vw,300px)]"
+            className="bloom h-auto w-[clamp(96px,28vw,300px)]"
             style={{ ["--bloom-d" as string]: `${c.delay}s`, ["--bloom-o" as string]: c.origin, ["--bloom-r" as string]: `${c.rot}deg` }}
           />
         </div>

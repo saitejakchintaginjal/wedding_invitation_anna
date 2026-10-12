@@ -42,7 +42,7 @@ export default function Gate() {
   const ART_W = "max(100cqw, 53.69cqh)";
   const door = (left: boolean) => (
     <div
-      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#1f4a3a] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[1600ms] ${ease}`}
+      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#5e0f1f] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[1600ms] ${ease}`}
       style={{
         // hinged on the outer edge, the door swings away from the viewer like a real door opening inward
         transform: cardOpen ? `rotateY(${left ? 105 : -105}deg)` : "none",
@@ -78,20 +78,32 @@ export default function Gate() {
 
         {/* overlay box that matches the artwork exactly, so positions below are percentages of the image */}
         <div className="absolute left-1/2 top-1/2 aspect-[800/1490] -translate-x-1/2 -translate-y-1/2" style={{ width: ART_W }}>
-          {/* names in gold, in the green band between the Ganesha emblem and the arch */}
+          {/* names in gold, in the burgundy band between the Ganesha emblem and the arch */}
           <div className={`absolute inset-x-0 top-[19.2%] text-center transition-opacity duration-500 ${cardOpen ? "opacity-0" : "opacity-100"}`}>
             <p className="whitespace-nowrap font-serif text-[17px] font-semibold uppercase tracking-[.28em] text-[#f6e3a1] drop-shadow-[0_1px_3px_rgba(0,0,0,.7)]">
               {wedding.groom} <span className="mx-1 text-[#e8c872]">&amp;</span> {wedding.bride}
             </p>
           </div>
 
-          {/* a golden padlock holds the doors shut: tap it to unlock */}
+          {/* brass rod threaded through both door rings; the padlock hangs from its middle */}
+          <svg viewBox="0 0 800 1490" preserveAspectRatio="none" className={`pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-300 ${cardOpen ? "opacity-0" : "opacity-100"}`} aria-hidden>
+            <defs>
+              <linearGradient id="rod" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#f6e3a0" /><stop offset=".45" stopColor="#b98a2e" /><stop offset="1" stopColor="#5a3b0a" />
+              </linearGradient>
+            </defs>
+            <rect x="300" y="716" width="200" height="12" rx="6" fill="#000" opacity=".35" transform="translate(0 5)" />
+            <rect x="300" y="709" width="200" height="11" rx="5.5" fill="url(#rod)" stroke="#3a2406" strokeWidth="1.2" />
+            {[302, 498].map((x) => <circle key={x} cx={x} cy="714.5" r="9" fill="url(#rod)" stroke="#3a2406" strokeWidth="1.2" />)}
+          </svg>
+
+          {/* a small golden padlock holds the doors shut: tap it to unlock */}
           <button
             type="button" onClick={start} aria-label="Unlock and open the invitation"
-            className={`pointer-events-auto absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 ${cardOpen ? "opacity-0 transition-opacity duration-300" : ""} ${unlocking ? "pointer-events-none" : ""}`}
+            className={`pointer-events-auto absolute left-1/2 top-[47.9%] -translate-x-1/2 ${cardOpen ? "opacity-0 transition-opacity duration-300" : ""} ${unlocking ? "pointer-events-none" : ""}`}
           >
             <span className={`lock mx-auto block w-fit ${unlocking ? "lock-open" : "lock-idle"}`}>
-              <svg viewBox="0 0 140 190" className="block w-[118px] drop-shadow-[0_10px_12px_rgba(0,0,0,.55)]" aria-hidden>
+              <svg viewBox="0 0 140 190" className="block w-[10.5cqw] min-w-[40px] max-w-[54px] drop-shadow-[0_5px_5px_rgba(0,0,0,.6)]" aria-hidden>
                 <defs>
                   <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0" stopColor="#f3dc8e" /><stop offset=".3" stopColor="#c9993a" /><stop offset=".65" stopColor="#8e6218" /><stop offset="1" stopColor="#d6ad54" />
@@ -146,8 +158,8 @@ export default function Gate() {
                 <path d="M26 95 q28 -7 62 -4" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>
-            <span className={`mt-2 block whitespace-nowrap text-center text-[10px] font-semibold uppercase tracking-[.35em] text-[#fff2c8] [text-shadow:0_1px_3px_rgba(0,0,0,.8)] transition-opacity duration-300 ${unlocking ? "opacity-0" : "opacity-100"}`}>
-              Tap to unlock
+            <span className={`mt-2 block whitespace-nowrap text-center text-[10px] font-semibold uppercase tracking-[.35em] text-[#fff2c8] [text-shadow:0_1px_3px_rgba(0,0,0,.9)] transition-opacity duration-300 ${unlocking ? "opacity-0" : "opacity-100"}`}>
+              Tap to enter
             </span>
           </button>
         </div>

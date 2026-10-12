@@ -10,16 +10,18 @@ type Rocket = { x: number; y: number; vy: number; targetY: number; color: string
 
 /** Rockets streak up and burst into gold/pink sparks. Pauses when off-screen or `enabled()` is false. */
 export default function Fireworks({
-  enabled, rate = 1, light = false, className = "",
-}: { enabled?: () => boolean; rate?: number; light?: boolean; className?: string }) {
+  enabled, rate = 1, light = false, startAfter, className = "",
+}: { enabled?: () => boolean; rate?: number; light?: boolean; startAfter?: { htmlClass: string; ms: number }; className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const cv = ref.current;
     const ctx = cv?.getContext("2d");
-    if (!cv || !ctx || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // decorative, and phones often have "reduce motion" on: still run it, just calmer
+    if (!cv || !ctx) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let W = 0, H = 0, raf = 0, visible = true, last = performance.now(), wait = 0;
+    let W = 0, H = 0, raf = 0, visible = true, last = performance.now(), wait = 0, readyAt = 0;
     const sparks: Spark[] = [];
     const rockets: Rocket[] = [];
     const PAL = light ? LIGHT : COLORS;
@@ -59,7 +61,13 @@ export default function Fireworks({
       raf = requestAnimationFrame(frame);
       const dt = Math.min(2.5, (t - last) / 16.67);
       last = t;
-      if (!visible || (enabled && !enabled())) {
+      // optionally hold off until <html> has the class (e.g. "revealed") for `ms`, so the show starts once the scene is ready
+      let held = false;
+      if (startAfter) {
+        if (!document.documentElement.classList.contains(startAfter.htmlClass)) { readyAt = 0; held = true; }
+        else { if (!readyAt) readyAt = t; if (t - readyAt < startAfter.ms) held = true; }
+      }
+      if (held || !visible || (enabled && !enabled())) {
         if (sparks.length || rockets.length) { sparks.length = 0; rockets.length = 0; }
         ctx.clearRect(0, 0, W, H);
         return;
@@ -70,7 +78,7 @@ export default function Fireworks({
       ctx.globalCompositeOperation = light ? "source-over" : "lighter";
 
       wait -= dt;
-      if (wait <= 0) { launch(); if (Math.random() < 0.35) launch(); wait = rnd(30, 75) / rate; }
+      if (wait <= 0) { launch(); if (Math.random() < 0.35) launch(); wait = rnd(30, 75) / (rate * (calm ? 0.6 : 1)); }
 
       for (let i = rockets.length - 1; i >= 0; i--) {
         const r = rockets[i];

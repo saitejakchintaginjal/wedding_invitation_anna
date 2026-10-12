@@ -57,7 +57,7 @@ function Hero() {
           className="seq-couple absolute h-auto"
           style={{ left: "35.84%", top: "31.67%", width: "35.64%" }}
         />
-        <div className="seq-fx absolute inset-0"><Fireworks light /></div>
+        <div className="seq-fx absolute inset-0"><Fireworks light startAfter={{ htmlClass: "revealed", ms: 2800 }} /></div>
       </div>
       <div className="pb-3" />
     </section>
@@ -68,7 +68,7 @@ function Welcome() {
   return (
     <section className="px-8 pt-8">
       <ScrollReveal className="rounded-3xl border border-gold/20 bg-gradient-to-b from-white/25 to-white/45 px-5 py-5 text-center shadow-[0_10px_40px_rgba(212,164,57,.14)] backdrop-blur-[2px]">
-        <div className="mx-auto flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 font-script text-sm text-gold-dark">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 pb-0.5 font-script text-[17px] leading-none tracking-tight text-gold-dark shadow-[inset_0_0_0_3px_rgba(255,247,234,.9),inset_0_0_0_4px_rgba(184,134,11,.35)]">
           {initials}
         </div>
         <p className="mt-2 text-[9px] uppercase tracking-[.3em] text-gold-dark">Together with their families</p>
@@ -106,7 +106,7 @@ function Celebrations() {
                 <div className="mt-1 text-[10px] uppercase tracking-[.25em] text-maroon/80">{month.slice(0, 3)} {year}</div>
               </div>
               <div className="min-w-0 flex-1 border-l border-gold/40 pl-4">
-                <h3 className="gold-text font-script text-3xl leading-tight">{e.name}</h3>
+                <h3 className="gold-text font-script text-[28px] leading-tight">{e.name}</h3>
                 {e.timeLabel && <p className="mt-0.5 inline-block rounded-full border border-gold-dark/40 px-3 py-0.5 text-[11px] uppercase tracking-[.2em] text-gold-dark">{e.timeLabel}</p>}
                 <p className="mt-1.5 text-xs text-maroon/90">📍 {e.venue}</p>
               </div>
@@ -130,6 +130,25 @@ function MeetCouple() {
           <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
         </div>
       </ScrollReveal>
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        {[
+          { src: "/groom.jpg", name: wedding.groom, role: "The Groom", pos: "50% 22%" },
+          { src: "/bride.jpg", name: wedding.bride, role: "The Bride", pos: "62% 12%" },
+        ].map((p, i) => (
+          <ScrollReveal key={p.role} delay={i * 0.12}>
+            <figure className="tap-lift text-center">
+              <div className="ornate-frame aspect-[3/4] overflow-hidden rounded-t-[999px] shadow-[0_14px_30px_rgba(90,30,20,.3)]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.src} alt={p.name} className="h-full w-full object-cover" style={{ objectPosition: p.pos }} />
+              </div>
+              <figcaption className="mt-2">
+                <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">{p.role}</p>
+                <p className="font-script text-3xl leading-tight text-maroon-deep">{p.name}</p>
+              </figcaption>
+            </figure>
+          </ScrollReveal>
+        ))}
+      </div>
       <ScrollReveal delay={0.1}>
         <div className={`${block} tap-lift mt-6 text-center`}>
           <p className="font-script text-4xl leading-tight text-gold-dark">Two hearts, one journey</p>
@@ -142,23 +161,52 @@ function MeetCouple() {
   );
 }
 
-const ROT = [-3, 3, 3, -3];
+function Childhood() {
+  const kids = [
+    { src: "/groom-child.jpg", name: wedding.groom, line: "A little boy with big dreams", pos: "50% 18%", rot: -3 },
+    { src: "/bride-child.jpg", name: wedding.bride, line: "A little princess with a big smile", pos: "50% 22%", rot: 3 },
+  ];
+  return (
+    <section className="px-5 pt-12">
+      <SectionTitle eyebrow="Where it all began" title="Once Upon a Time" />
+      <div className="grid grid-cols-2 gap-5">
+        {kids.map((k, i) => (
+          <ScrollReveal key={k.name} delay={i * 0.12}>
+            <figure className="tap-lift relative bg-ivory p-2 pb-12 shadow-[0_14px_28px_rgba(90,30,20,.3)]" style={{ transform: `rotate(${k.rot}deg)` }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={k.src} alt={`${k.name} as a child`} className="aspect-[4/5] w-full object-cover" style={{ objectPosition: k.pos }} />
+              <figcaption className="absolute inset-x-0 bottom-1.5 text-center font-script text-2xl leading-none text-maroon">{k.name}</figcaption>
+            </figure>
+          </ScrollReveal>
+        ))}
+      </div>
+      <ScrollReveal delay={0.1}>
+        <div className="glass tap-lift mt-7 rounded-3xl px-5 py-4 text-center">
+          <p className="font-script text-4xl leading-tight text-gold-dark">Two little stories</p>
+          <p className="mt-1.5 font-serif text-base leading-relaxed text-maroon/90">
+            Long before they met, two sweet children were growing up under different roofs, never knowing that life was quietly
+            writing them into the same story. Today, that story becomes forever.
+          </p>
+        </div>
+      </ScrollReveal>
+    </section>
+  );
+}
 
 function Gallery() {
   return (
     <section className="px-5 pt-12">
       <SectionTitle eyebrow="Our story, so far" title="Moments" />
-      <div className="grid grid-cols-2 gap-5">
+      <div className="space-y-8">
         {photos.map((ph, i) => (
-          <ScrollReveal key={ph.src} delay={(i % 2) * 0.12}>
-          <figure
-            className="relative bg-ivory p-2 pb-8 shadow-[0_14px_28px_rgba(90,30,20,.3)] transition-transform duration-300 [transform:rotate(var(--r))] hover:z-10 hover:[transform:rotate(0deg)_scale(1.06)] active:[transform:rotate(0deg)_scale(1.06)]"
-            style={{ ["--r" as string]: `${ROT[i % ROT.length]}deg` }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={ph.src} alt={ph.caption} className="aspect-[4/5] w-full object-cover" />
-            <figcaption className="absolute inset-x-0 bottom-1 text-center font-script text-xl text-maroon">{ph.caption}</figcaption>
-          </figure>
+          <ScrollReveal key={ph.src}>
+            <figure
+              className={`relative w-[84%] bg-ivory p-2.5 pb-4 shadow-[0_16px_32px_rgba(90,30,20,.32)] transition-transform duration-300 [transform:rotate(var(--r))] hover:z-10 hover:[transform:rotate(0deg)_scale(1.03)] active:[transform:rotate(0deg)_scale(1.03)] ${i % 2 ? "ml-auto" : ""}`}
+              style={{ ["--r" as string]: `${i % 2 ? 2.5 : -2.5}deg` }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ph.src} alt={ph.caption} className="aspect-[3/4] w-full object-cover" style={{ objectPosition: ph.pos }} />
+            </figure>
           </ScrollReveal>
         ))}
       </div>
@@ -169,11 +217,17 @@ function Gallery() {
 export default function Invitation() {
   return (
     <>
+      {/* sacred symbols: transparent cut-out with a soft brown edge so the white Namam shows on ivory */}
+      <header className="px-10 pb-0 pt-4">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/symbols.png" alt="Sudarshana Chakra, Namam and Shankha" className="mx-auto block h-auto w-[48%] [filter:drop-shadow(0_0_.6px_#6b4410)_drop-shadow(0_0_.6px_#6b4410)_drop-shadow(0_2px_3px_rgba(90,40,10,.25))]" />
+      </header>
       <Hero />
       <Welcome />
       <ScratchCard />
       <Celebrations />
       <MeetCouple />
+      <Childhood />
       <Gallery />
     </>
   );

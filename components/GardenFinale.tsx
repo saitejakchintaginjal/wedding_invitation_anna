@@ -2,7 +2,7 @@
 
 import Countdown from "./Countdown";
 import { SectionTitle } from "./Reveal";
-import { events, wedding } from "@/lib/config";
+import { events, venues, wedding } from "@/lib/config";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const stamp = (d: Date) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
@@ -28,8 +28,6 @@ function share() {
 }
 
 export default function GardenFinale() {
-  const q = encodeURIComponent(wedding.mapsQuery);
-  const mapHref = `https://www.google.com/maps/search/?api=1&query=${q}`;
   const btn = "rounded-full px-6 py-3.5 text-xs font-medium";
 
   return (
@@ -37,16 +35,24 @@ export default function GardenFinale() {
       <Countdown />
 
       <section>
-        <SectionTitle eyebrow="Where" title="The Venue" />
-        <div className="glass overflow-hidden rounded-3xl p-3 text-center">
-          <p className="mt-2 font-serif text-2xl text-maroon-deep">{wedding.venue}</p>
-          <p className="mb-3 mt-1 text-sm text-maroon/80">{wedding.address}</p>
-          <iframe
-            title={`Map of ${wedding.venue}`}
-            src={`https://www.google.com/maps?q=${q}&output=embed`}
-            className="h-52 w-full rounded-2xl border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-          />
-          <a href={mapHref} target="_blank" rel="noopener noreferrer" className={`gold-btn mb-2 mt-4 inline-block ${btn}`}>OPEN IN GOOGLE MAPS</a>
+        <SectionTitle eyebrow="Where" title="The Venues" />
+        <div className="space-y-2.5">
+          {venues.map((v) => {
+            const vq = encodeURIComponent(v.query);
+            return (
+              <div key={v.query} className="glass overflow-hidden rounded-2xl p-2 text-center">
+                <p className="text-[9px] uppercase tracking-[.3em] text-gold-dark">{v.event}</p>
+                <p className="font-serif text-base leading-tight text-maroon-deep">{v.name}</p>
+                <p className="mb-1.5 text-[11px] text-maroon/80">{v.address}</p>
+                <iframe
+                  title={`Map of ${v.name}`}
+                  src={`https://www.google.com/maps?q=${vq}&output=embed`}
+                  className="h-20 w-full rounded-lg border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                />
+                <a href={`https://www.google.com/maps/search/?api=1&query=${vq}`} target="_blank" rel="noopener noreferrer" className="gold-btn mt-2 inline-block rounded-full px-4 py-1.5 text-[9px] font-medium">OPEN IN GOOGLE MAPS</a>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -63,8 +69,12 @@ export default function GardenFinale() {
       </section>
 
       <footer className="text-center">
-        <p className="gold-text font-script text-5xl">{wedding.groom} &amp; {wedding.bride}</p>
-        <p className="mt-1 text-xs font-medium uppercase tracking-[.3em] text-maroon">With love, always</p>
+        <p className="flex items-center justify-center gap-1.5 whitespace-nowrap pt-5 font-script text-[clamp(30px,10.5vw,48px)] leading-[1.5]">
+          <span className="gold-text px-1 pt-2">{wedding.groom}</span>
+          <span className="text-[.7em] text-ruby drop-shadow-[0_2px_4px_rgba(179,18,46,.35)]" aria-label="and">♥</span>
+          <span className="gold-text px-1 pt-2">{wedding.bride}</span>
+        </p>
+        <p className="mt-2 text-xs font-medium uppercase tracking-[.3em] text-maroon">With love, always</p>
       </footer>
     </section>
   );
