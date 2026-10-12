@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Parisienne, Cormorant_Garamond, Great_Vibes, Jost } from "next/font/google";
+import { Satisfy, Cormorant_Garamond, Great_Vibes, Jost } from "next/font/google";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-serif" });
 const script = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--font-script" });
-const display = Parisienne({ subsets: ["latin"], weight: "400", variable: "--font-display" });
+const display = Satisfy({ subsets: ["latin"], weight: "400", variable: "--font-display" });
 const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-sans" });
 
 export const metadata: Metadata = {

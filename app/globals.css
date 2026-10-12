@@ -40,6 +40,14 @@ input, select, textarea { font-size: 16px; } /* prevent iOS zoom */
   100% { transform: rotateX(0); opacity: 1; }
 }
 .flip-in { animation: flipIn .45s ease-out both; transform-origin: 50% 50%; }
+@keyframes lockPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(241,217,138,0)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 16px rgba(255,214,130,.8)); }
+}
+@keyframes tagPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+}
 @keyframes sway {
   0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); }
 }

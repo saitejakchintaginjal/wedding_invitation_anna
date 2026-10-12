@@ -1,4 +1,5 @@
 import Fireworks from "./Fireworks";
+import CapName from "./CapName";
 import FlipWord from "./FlipWord";
 import { SectionTitle } from "./Reveal";
 import { couple, events, photos, wedding } from "@/lib/config";
@@ -6,17 +7,17 @@ import { couple, events, photos, wedding } from "@/lib/config";
 const initials = `${wedding.groom[0]} & ${wedding.bride[0]}`;
 
 function Hero() {
-  const name = "font-display text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.95)]";
+  const name = "font-script text-maroon-deep drop-shadow-[0_0_10px_rgba(255,247,234,.95)]";
   // only the empty sky at the top of the photo dissolves into the page; the temple and couple stay untouched
   const fade = "linear-gradient(to bottom, transparent 0%, #000 24%, #000 92%, transparent 100%)";
   return (
     <section className="relative overflow-hidden bg-ivory pt-8 text-center">
       <div className="relative z-10 flex flex-col items-center px-4">
         <p className="mb-3 text-[10px] font-medium uppercase tracking-[.4em] text-maroon">With Bappa&apos;s Blessings</p>
-        <div className="flex items-baseline justify-center gap-1.5 whitespace-nowrap text-[clamp(28px,9.6vw,44px)] leading-none">
-          <span className={name}>{wedding.groom}</span>
+        <div className="flex items-baseline justify-center gap-2 whitespace-nowrap pl-3 text-[clamp(28px,8.8vw,40px)] leading-none">
+          <CapName className={name}>{wedding.groom}</CapName>
           <FlipWord className="font-script text-[.95em] text-ruby drop-shadow-[0_0_8px_rgba(255,247,234,.95)]" />
-          <span className={name}>{wedding.bride}</span>
+          <CapName className={name}>{wedding.bride}</CapName>
         </div>
       </div>
 
@@ -91,7 +92,7 @@ function MeetCouple() {
       <SectionTitle eyebrow="Meet the" title="Bride & Groom" />
       <div className="ornate-frame mx-auto aspect-[2/3] w-[76%] overflow-hidden rounded-t-[999px] bg-night shadow-[0_18px_40px_rgba(90,30,20,.35)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero.png" alt="" className="h-full w-full object-cover object-[50%_40%]" />
+        <img src="/couple.png" alt="Sai Kiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
       </div>
       <div className="mt-6 space-y-4">
         <div className={block}>
