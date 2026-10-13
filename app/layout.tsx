@@ -5,7 +5,7 @@ import "./globals.css";
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-serif" });
 const script = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--font-script" });
 const display = Satisfy({ subsets: ["latin"], weight: "400", variable: "--font-display" });
-const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-sans" });
+const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "SaiKiran & Asha - Wedding Invitation",

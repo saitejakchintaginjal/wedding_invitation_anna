@@ -1,6 +1,7 @@
 "use client";
 
 import CapName from "./CapName";
+import Celebrations from "./Celebrations";
 import Countdown from "./Countdown";
 import { SectionTitle } from "./Reveal";
 import { events, venues, wedding } from "@/lib/config";
@@ -34,6 +35,8 @@ export default function GardenFinale() {
   return (
     <section className="space-y-12 px-5 pb-12 pt-12">
       <Countdown />
+
+      <Celebrations />
 
       <section>
         <SectionTitle eyebrow="Where" title="The Venues" />

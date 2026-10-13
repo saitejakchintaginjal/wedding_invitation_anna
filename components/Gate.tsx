@@ -9,8 +9,8 @@ type Phase = "closed" | "card" | "open";
 const UNLOCK_MS = 1000;
 
 /** After the doors open, the camera pushes forward and the curtain frame sweeps past it (see .curtain-pass in
- *  globals.css: starts 1.5s after the tap, takes 3.5s). The gate is removed once that has finished. */
-const GATE_DONE_AT = 5400;
+ *  globals.css: starts 2.5s after the tap, takes 3.5s). The gate is removed once that has finished. */
+const GATE_DONE_AT = 6400;
 
 export default function Gate() {
   const [phase, setPhase] = useState<Phase>("closed");
@@ -42,7 +42,7 @@ export default function Gate() {
   const ART_W = "max(100cqw, 53.69cqh)";
   const door = (left: boolean) => (
     <div
-      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#5e0f1f] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[1600ms] ${ease}`}
+      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#5e0f1f] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[2600ms] ${ease}`}
       style={{
         // hinged on the outer edge, the door swings away from the viewer like a real door opening inward
         transform: cardOpen ? `rotateY(${left ? 105 : -105}deg)` : "none",
@@ -158,8 +158,8 @@ export default function Gate() {
                 <path d="M26 95 q28 -7 62 -4" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>
-            <span className={`mt-2 block whitespace-nowrap text-center text-[10px] font-semibold uppercase tracking-[.35em] text-[#fff2c8] [text-shadow:0_1px_3px_rgba(0,0,0,.9)] transition-opacity duration-300 ${unlocking ? "opacity-0" : "opacity-100"}`}>
-              Tap to enter
+            <span className={`mx-auto mt-2 block w-fit whitespace-nowrap rounded-full border border-[#e8c872]/70 bg-[#3a0a14]/80 px-3.5 py-1.5 text-center text-[12px] font-bold uppercase tracking-[.28em] text-[#fff6d6] shadow-[0_2px_8px_rgba(0,0,0,.55)] [text-shadow:0_1px_2px_rgba(0,0,0,.9)] transition-opacity duration-300 ${unlocking ? "opacity-0" : "opacity-100"}`}>
+              Tap to open
             </span>
           </button>
         </div>
