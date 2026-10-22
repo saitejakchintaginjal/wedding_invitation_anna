@@ -1,10 +1,10 @@
 // Flowers that bloom into the four corners of the screen, one after another, once the gate has opened.
 // On wide screens they fill the empty space beside the phone-width column.
 const CORNERS = [
-  { pos: "left-0 top-0", flip: "", origin: "0 0", delay: 8.2, rot: -14 },
-  { pos: "right-0 top-0", flip: "-scale-x-100", origin: "100% 0", delay: 9.2, rot: 14 },
-  { pos: "right-0 bottom-0", flip: "-scale-100", origin: "100% 100%", delay: 10.2, rot: -14 },
-  { pos: "left-0 bottom-0", flip: "-scale-y-100", origin: "0 100%", delay: 11.2, rot: 14 },
+  { pos: "left-0 top-0", flip: "", origin: "0 0", delay: 11, rot: -14 },
+  { pos: "right-0 top-0", flip: "-scale-x-100", origin: "100% 0", delay: 11.7, rot: 14 },
+  { pos: "right-0 bottom-0", flip: "-scale-100", origin: "100% 100%", delay: 12.4, rot: -14 },
+  { pos: "left-0 bottom-0", flip: "-scale-y-100", origin: "0 100%", delay: 13, rot: 14 },
 ];
 
 export default function CornerFlowers() {

@@ -58,7 +58,7 @@ function Hero() {
             <CapName className={name}>{wedding.bride}</CapName>
           </div>
         </div>
-        <div className="seq-fx absolute inset-0"><Fireworks light startAfter={{ htmlClass: "revealed", ms: 3800 }} /></div>
+        <div className="seq-fx absolute inset-0"><Fireworks light startAfter={{ htmlClass: "revealed", ms: 8000 }} /></div>
       </div>
     </section>
   );

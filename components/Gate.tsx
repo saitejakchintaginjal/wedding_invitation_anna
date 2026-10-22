@@ -9,8 +9,8 @@ type Phase = "closed" | "card" | "open";
 const UNLOCK_MS = 1000;
 
 /** After the doors open, the camera pushes forward and the curtain frame sweeps past it (see .curtain-pass in
- *  globals.css: starts 2.5s after the tap, takes 3.5s). The gate is removed once that has finished. */
-const GATE_DONE_AT = 6400;
+ *  globals.css: starts 3.2s after the doors begin, takes 3.5s). The gate is removed once that has finished. */
+const GATE_DONE_AT = 7000;
 
 export default function Gate() {
   const [phase, setPhase] = useState<Phase>("closed");
@@ -43,7 +43,7 @@ export default function Gate() {
   const ART_W = "max(100cqw, 53.69cqh)";
   const door = (left: boolean) => (
     <div
-      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#5e0f1f] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[2600ms] ${ease}`}
+      className={`absolute top-0 h-full w-1/2 overflow-hidden bg-[#5e0f1f] ${left ? "left-0 origin-left" : "right-0 origin-right"} transition-[transform,filter] duration-[4500ms] ${ease}`}
       style={{
         // hinged on the outer edge, the door swings away from the viewer like a real door opening inward
         transform: cardOpen ? `rotateY(${left ? 105 : -105}deg)` : "none",
