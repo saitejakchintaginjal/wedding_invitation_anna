@@ -27,6 +27,7 @@ export default function Gate() {
   const start = () => {
     if (phase !== "closed" || unlocking) return;
     setUnlocking(true); // shackle pops open, the lock drops away...
+    window.dispatchEvent(new Event("invitation:open")); // the tap is the user gesture that lets the music start
     setTimeout(() => {
       setPhase("card"); // ...then the doors swing
       document.documentElement.classList.add("revealed"); // the hero sequence plays behind the opening doors
