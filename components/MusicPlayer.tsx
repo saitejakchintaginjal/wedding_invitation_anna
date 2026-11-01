@@ -12,6 +12,12 @@ const START_FADE = 1.2;     // seconds to fade the very first sound in
 const CROSSFADE = 4.5;      // seconds over which the intro hands over to the main track
 const MUTE_FADE = 0.6;      // seconds for the mute button to fade out / in
 
+/** Lets the auto-scroll know whether the opening track is still playing (<html data-intro="playing" | "done"). */
+const introState = (s: "playing" | "done") => {
+  document.documentElement.dataset.intro = s;
+  if (s === "done") window.dispatchEvent(new Event("invitation:intro-end"));
+};
+
 /** Wedding music. Phones only allow sound after a tap, so it starts when the entrance is tapped (Gate fires the
  *  "invitation:open" event). The intro and main tracks are blended with an equal-power crossfade, driven every frame from
  *  the intro's own clock so the handover stays smooth. A round button lets guests mute it. */
@@ -50,7 +56,7 @@ export default function MusicPlayer() {
         mv = Math.sin(p * Math.PI / 2);
         if (b && b.paused && wantPlay.current && m.target > 0) b.play().catch(() => {});
       }
-      if (a.ended || (d && t >= d - 0.02)) phase.current = "main";
+      if (a.ended || (d && t >= d - 0.02)) { phase.current = "main"; introState("done"); }
     } else if (phase.current === "main" && b) {
       mv = 1;
     }
@@ -66,6 +72,16 @@ export default function MusicPlayer() {
 
   const loop = () => { if (!raf.current) { last.current = performance.now(); raf.current = requestAnimationFrame(tick); } };
 
+  // starts the music on the first real touch / click / key press, for browsers that block sound that starts on its own
+  const touchArmed = useRef(false);
+  const armTouch = () => {
+    if (touchArmed.current) return;
+    touchArmed.current = true;
+    const events = ["pointerup", "touchend", "click", "keydown"] as const;
+    const go = () => { events.forEach((e) => window.removeEventListener(e, go, true)); touchArmed.current = false; play(); };
+    events.forEach((e) => window.addEventListener(e, go, true));
+  };
+
   const play = () => {
     const a = intro.current, b = main.current;
     wantPlay.current = true;
@@ -77,17 +93,24 @@ export default function MusicPlayer() {
     if (!cur) return;
     cur.volume = 0;
     cur.play()
-      .then(() => { setPlaying(true); loop(); })
-      .catch(() => {
+      .then(() => { setPlaying(true); loop(); if (phase.current === "intro") introState("playing"); })
+      .catch((err: unknown) => {
+        // the browser refuses sound until the guest touches the page: wait for the first touch, then start
+        if ((err as { name?: string })?.name === "NotAllowedError") {
+          wantPlay.current = false; master.current.target = 0;
+          if (!resume) phase.current = "idle";
+          setPlaying(false); armTouch();
+          return;
+        }
         // intro could not play: fall straight through to the main track
-        if (phase.current === "intro") { setIntroOk(false); phase.current = "main"; b?.play().then(() => { setPlaying(true); loop(); }).catch(() => { wantPlay.current = false; setPlaying(false); }); }
+        if (phase.current === "intro") { setIntroOk(false); phase.current = "main"; introState("done"); b?.play().then(() => { setPlaying(true); loop(); }).catch(() => { wantPlay.current = false; setPlaying(false); }); }
         else { wantPlay.current = false; setPlaying(false); }
       });
     // when the main track has already begun blending, resume it too
     if (phase.current === "intro" && a && b && a.currentTime >= Math.max(START_FADE, (a.duration || 0) - CROSSFADE)) b.play().catch(() => {});
   };
 
-  const pause = () => { wantPlay.current = false; master.current.target = 0; loop(); setPlaying(false); };
+  const pause = () => { if (phase.current === "intro") introState("done"); wantPlay.current = false; master.current.target = 0; loop(); setPlaying(false); };
 
   useEffect(() => {
     // the load can fail before React attaches onError, so also ask the elements directly

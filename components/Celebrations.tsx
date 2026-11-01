@@ -15,9 +15,6 @@ export default function Celebrations() {
             <article
               className={`glass tap-lift relative flex items-center gap-4 rounded-3xl p-4 ${featured ? "!border-gold-dark/80 bg-gradient-to-br from-ruby/15 to-saffron/20" : ""}`}
             >
-              {featured && (
-                <span className="gold-btn absolute -top-2.5 right-5 rounded-full px-3 py-1 text-[9px] font-medium">MAIN EVENT</span>
-              )}
               <div className="shrink-0 text-center">
                 <div className="gold-text font-serif text-5xl font-semibold leading-none">{day}</div>
                 <div className="mt-1 text-[10px] uppercase tracking-[.25em] text-maroon/80">{month.slice(0, 3)} {year}</div>

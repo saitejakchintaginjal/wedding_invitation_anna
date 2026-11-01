@@ -66,7 +66,7 @@ function Hero() {
 
 function Welcome() {
   return (
-    <section className="px-8 pt-8">
+    <section className="px-8 pt-8" data-autoscroll-skip data-autoscroll-stop="0.235" data-autoscroll-until="#save-the-date">{/* rest here so the Welcome card and the whole scratch heart below it are in view */}
       <ScrollReveal className="rounded-3xl border border-gold/20 bg-gradient-to-b from-white/25 to-white/45 px-5 py-5 text-center shadow-[0_10px_40px_rgba(212,164,57,.14)] backdrop-blur-[2px]">
         <div className="mx-auto flex h-16 w-16 items-center justify-center whitespace-nowrap rounded-full border border-gold-dark/70 pb-0.5 font-script text-[16px] leading-none tracking-tight text-gold-dark shadow-[inset_0_0_0_3px_rgba(255,247,234,.9),inset_0_0_0_4px_rgba(184,134,11,.35)]">
           <span className="flex items-center gap-[6px]">
@@ -96,29 +96,31 @@ function MeetCouple() {
   ];
   const block = "glass rounded-3xl px-5 py-4";
   return (
-    <section className="px-5 pt-12">
+    <section className="px-5 pt-12" data-autoscroll-skip>
+      {/* one rest point for the whole group: title, childhood photos, note and the two portraits */}
+      <div data-autoscroll-stop="0.02" data-autoscroll-until="#meet-end">
       <SectionTitle eyebrow="Meet the" title="Bride & Groom" />
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-4">
         {kids.map((k, i) => (
           <ScrollReveal key={k.name} delay={i * 0.12}>
-            <figure className="tap-lift relative bg-ivory p-2 pb-12 shadow-[0_14px_28px_rgba(90,30,20,.3)]" style={{ transform: `rotate(${k.rot}deg)` }}>
+            <figure className="tap-lift relative bg-ivory p-2 pb-10 shadow-[0_14px_28px_rgba(90,30,20,.3)]" style={{ transform: `rotate(${k.rot}deg)` }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={k.src} alt={`${k.name} as a child`} className="aspect-[4/5] w-full object-cover" style={{ objectPosition: k.pos }} />
+              <img src={k.src} alt={`${k.name} as a child`} className="aspect-[6/7] w-full object-cover" style={{ objectPosition: k.pos }} />
               <figcaption className="absolute inset-x-0 bottom-1.5 text-center font-script text-2xl leading-none text-maroon"><CapName>{k.name}</CapName></figcaption>
             </figure>
           </ScrollReveal>
         ))}
       </div>
       <ScrollReveal delay={0.1}>
-        <div className="glass tap-lift mt-7 rounded-3xl px-5 py-4 text-center">
-          <p className="font-script text-4xl leading-tight text-gold-dark">Two little stories</p>
-          <p className="mt-1.5 font-serif text-base leading-relaxed text-maroon/90">
+        <div className="glass tap-lift mt-4 rounded-3xl px-4 py-3 text-center">
+          <p className="font-script text-3xl leading-tight text-gold-dark">Two little stories</p>
+          <p className="mt-1 font-serif text-[15px] leading-snug text-maroon/90">
             Long before they met, two sweet children were growing up under different roofs, never knowing that life was quietly
             writing them into the same story. Today, that story becomes forever.
           </p>
         </div>
       </ScrollReveal>
-      <div className="mt-9 grid grid-cols-2 gap-4">
+      <div id="meet-end" className="mt-4 grid grid-cols-2 gap-4">
         {[
           { src: "/groom.jpg", name: wedding.groom, role: "The Groom", pos: "50% 12%" },
           { src: "/bride.jpg", name: wedding.bride, role: "The Bride", pos: "62% 12%" },
@@ -129,7 +131,7 @@ function MeetCouple() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.src} alt={p.name} className="h-full w-full object-cover" style={{ objectPosition: p.pos }} />
               </div>
-              <figcaption className="mt-2">
+              <figcaption className="mt-1.5">
                 <p className="text-[10px] uppercase tracking-[.3em] text-gold-dark">{p.role}</p>
                 <p className="font-script text-3xl leading-tight text-maroon-deep"><CapName>{p.name}</CapName></p>
               </figcaption>
@@ -137,12 +139,15 @@ function MeetCouple() {
           </ScrollReveal>
         ))}
       </div>
+      </div>
+      <div data-autoscroll-stop>{/* auto-scroll rests here: the couple photo and "Two hearts, one journey" */}
       <ScrollReveal>
         <div className="ornate-frame tap-lift mx-auto mt-6 aspect-[2/3] w-[76%] overflow-hidden rounded-t-[999px] bg-night shadow-[0_18px_40px_rgba(90,30,20,.35)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/couple.png" alt="SaiKiran and Asha" className="h-full w-full object-cover object-[50%_50%] [filter:brightness(1.22)_contrast(.96)_saturate(1.08)]" />
         </div>
       </ScrollReveal>
+      </div>
       <ScrollReveal delay={0.1}>
         <div className={`${block} tap-lift mt-6 text-center`}>
           <p className="font-script text-4xl leading-tight text-gold-dark">Two hearts, one journey</p>

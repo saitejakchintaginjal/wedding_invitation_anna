@@ -120,7 +120,7 @@ export default function ScratchCard() {
   };
 
   return (
-    <section className="px-5 pt-10">
+    <section id="save-the-date" className="px-5 pt-10" data-autoscroll-skip>
       <div className="mb-4 text-center">
         <p className="text-[11px] font-medium uppercase tracking-[.4em] text-gold-dark">A little surprise</p>
         <h2 className="mt-1 font-serif text-3xl font-semibold text-maroon-deep">Save the Date</h2>
