@@ -13,9 +13,9 @@ const EVERY_MS = 1300;          // a new flower roughly this often, so only a fe
 /** How each kind moves: heavy flower heads drop steadily; loose petals and leaves flutter and tumble more. Speeds are in pixels
  *  per frame at 60fps, so 0.5 is about 30 px a second (slow). */
 const MOTION = {
-  head:  { size: [26, 36], vy: [0.5, 0.9],  sway: [8, 18],  swayRate: [0.006, 0.012], vr: 0.008, flip: [0.004, 0.01] },
-  petal: { size: [40, 56], vy: [0.3, 0.6],  sway: [18, 38], swayRate: [0.01, 0.02],   vr: 0.02,  flip: [0.012, 0.028] },
-  leaf:  { size: [36, 48], vy: [0.35, 0.65], sway: [14, 28], swayRate: [0.01, 0.02],  vr: 0.015, flip: [0.01, 0.02] },
+  head:  { size: [15, 22], vy: [0.5, 0.9],  sway: [8, 18],  swayRate: [0.006, 0.012], vr: 0.008, flip: [0.004, 0.01] },
+  petal: { size: [24, 34], vy: [0.3, 0.6],  sway: [18, 38], swayRate: [0.01, 0.02],   vr: 0.02,  flip: [0.012, 0.028] },
+  leaf:  { size: [21, 28], vy: [0.35, 0.65], sway: [14, 28], swayRate: [0.01, 0.02],  vr: 0.015, flip: [0.01, 0.02] },
 } as const;
 
 /** A slow, gentle shower of realistic flowers across the whole page. Starts once the entrance doors have cleared (the Gate
@@ -69,7 +69,7 @@ export default function FlowerShower() {
         ctx.save();
         ctx.globalAlpha = 0.95 * fadeIn * (0.82 + 0.18 * turn);
         ctx.translate(b.x, b.y); ctx.rotate(b.rot); ctx.scale(Math.max(0.28, turn), 1);
-        ctx.shadowColor = "rgba(90,30,20,.3)"; ctx.shadowBlur = 5; ctx.shadowOffsetY = 1.5;
+        ctx.shadowColor = "rgba(90,30,20,.3)"; ctx.shadowBlur = 3; ctx.shadowOffsetY = 1;
         ctx.drawImage(b.img, -b.s / 2, -b.s / 2, b.s, b.s);
         ctx.restore();
       }

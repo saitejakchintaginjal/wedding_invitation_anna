@@ -7,6 +7,7 @@ const IDLE_MS = 3500;        // after a touch / tap / scroll, wait this long bef
 const SPEED = 70;            // glide speed, in pixels per second
 const MIN_GLIDE_MS = 2500;   // never glide faster than this, even over a short distance
 const MAX_GLIDE_MS = 16000;
+const MAX_STOPS = 3;         // after the guest has stopped it this many times, it stays off for good
 
 /** Pages through the invitation on its own: rest at each section, glide slowly to the next, repeat. Any touch, tap, wheel or
  *  key press stops it at once; it carries on from where the guest left off after IDLE_MS with no interaction. Starts when the
@@ -63,7 +64,7 @@ export default function AutoScroll() {
     const clearIntroWait = () => { if (onIntroEnd) { window.removeEventListener("invitation:intro-end", onIntroEnd); onIntroEnd = null; } };
 
     const goNext = () => {
-      if (!ready || document.hidden) return;
+      if (!ready || off || document.hidden) return;
       // the opening music is still playing: stay on this page until it has finished
       if (document.documentElement.dataset.intro === "playing") {
         clearIntroWait();
@@ -91,25 +92,36 @@ export default function AutoScroll() {
       raf = requestAnimationFrame(step);
     };
 
+    // each time the guest stops the auto-scroll counts once (a tap fires several events, so only count while it was running);
+    // after MAX_STOPS stops they clearly want to scroll themselves, so it never starts again
+    let stops_ = 0, paused = false, off = false;
+    const resume = () => { paused = false; goNext(); };
+
     /** The guest touched the page: stop right now and wait for them to leave it alone. */
     const interrupted = () => {
-      if (!ready) return;
+      if (!ready || off) return;
+      if (!paused) {
+        paused = true;
+        if (++stops_ >= MAX_STOPS) { off = true; stopGlide(); clearTimeout(timer); return; }
+      }
       stopGlide();
-      later(goNext, IDLE_MS);
+      later(resume, IDLE_MS);
     };
 
     // a scroll we did not cause (finger drag, fling, scrollbar, keyboard) counts as interaction too
     const onScroll = () => {
-      if (!ready) return;
+      if (!ready || off) return;
       if (Math.abs(window.scrollY - lastSet) < 2.5) return;
       interrupted();
     };
     const onVisibility = () => {
       if (!ready) return;
-      if (document.hidden) { stopGlide(); clearTimeout(timer); } else later(goNext, IDLE_MS);
+      if (off) return;
+      if (document.hidden) { stopGlide(); clearTimeout(timer); } else later(resume, IDLE_MS);
     };
 
     const begin = () => { if (ready) return; ready = true; later(goNext, DWELL_MS); };
+    // (goNext itself ignores calls once the guest has switched auto-scrolling off)
     if (document.documentElement.classList.contains("gate-done")) begin();
     window.addEventListener("invitation:ready", begin);
 

@@ -1,16 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { events, wedding } from "@/lib/config";
+import { wedding } from "@/lib/config";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const [y, m, d] = wedding.date.slice(0, 10).split("-").map(Number);
 const weekday = DAYS[new Date(y, m - 1, d).getDay()];
-const shaadi = events.find((e) => "featured" in e && e.featured);
 
 const BRUSH = 26;
+/** twinkles that appear around the heart once the date is revealed (positions inside the 200px heart box) */
+const SPARKLES = [{ x: -14, y: 20, s: 16 }, { x: 196, y: 10, s: 20 }, { x: 214, y: 92, s: 12 }, { x: -22, y: 104, s: 12 }, { x: 28, y: -14, s: 12 }, { x: 150, y: 176, s: 14 }];
 const REVEAL_AT = 0.5; // fraction scratched before the rest melts away
 
 function paintFoil(canvas: HTMLCanvasElement) {
@@ -134,18 +135,23 @@ export default function ScratchCard() {
         </clipPath>
       </svg>
 
-      <div className="mx-auto w-[200px] [filter:drop-shadow(0_14px_16px_rgba(90,30,20,.35))]">
+      <div
+        className="relative mx-auto w-[200px] origin-top transition-[transform,margin] duration-[1100ms] ease-[cubic-bezier(.34,1.45,.5,1)] [filter:drop-shadow(0_14px_16px_rgba(90,30,20,.35))]"
+        style={{ transform: done ? "scale(1.3)" : "none", marginBottom: done ? 58 : 0 }}
+      >
+        {done && SPARKLES.map((p, i) => (
+          <span key={i} aria-hidden className="sparkle pointer-events-none absolute text-gold" style={{ left: p.x, top: p.y, fontSize: p.s, animationDelay: `${0.5 + i * 0.22}s` }}>&#10022;</span>
+        ))}
         <div className="relative aspect-[1/.92] [clip-path:url(#scratch-heart)]">
           <div className="absolute inset-0 bg-gradient-to-br from-gold-light via-gold to-gold-dark" />
           <div className="absolute inset-[2.5%] bg-ivory [clip-path:url(#scratch-heart)]" />
           <div ref={wrap} className="absolute inset-[5%] bg-gradient-to-br from-cream to-[#fbe3b8] [clip-path:url(#scratch-heart)]">
             {/* the prize underneath */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pb-5 pt-2 text-center">
-              <p className="text-[8px] uppercase tracking-[.35em] text-gold-dark">{weekday}</p>
-              <p className="gold-text font-serif text-[44px] font-semibold leading-none">{d}</p>
-              <p className="font-serif text-sm font-semibold uppercase tracking-[.22em] text-maroon-deep">{MONTHS[m - 1]}</p>
-              <p className="font-serif text-xs tracking-[.3em] text-maroon">{y}</p>
-              {shaadi?.time && <p className="mt-0.5 text-[8px] uppercase tracking-[.2em] text-gold-dark">{shaadi.time}</p>}
+              <p className={`text-[8px] uppercase tracking-[.35em] text-gold-dark ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "0.55s" }}>{weekday}</p>
+              <p className={`gold-text font-serif font-semibold leading-none transition-[font-size] ${done ? "reveal-pop text-[66px]" : "text-[44px]"}`} style={{ animationDelay: "0.7s" }}>{d}</p>
+              <p className={`font-serif text-sm font-semibold uppercase tracking-[.2em] text-maroon-deep ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1s" }}>{MONTHS[m - 1]}</p>
+              <p className={`font-serif text-xs tracking-[.3em] text-maroon ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1.2s" }}>{y}</p>
             </div>
 
             {/* the foil */}

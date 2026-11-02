@@ -5,9 +5,6 @@ import { wedding } from "@/lib/config";
 
 type Phase = "closed" | "card" | "open";
 
-/** The doors open by themselves this long after the page has finished loading (a tap on the door opens them at once). */
-const AUTO_OPEN_MS = 1000;
-
 /** After the doors open, the camera pushes forward and the toran sweeps past it (see .camera-in and .curtain-pass in
  *  globals.css). The gate is removed once that has finished, which is also the moment auto-scrolling may begin. */
 const GATE_DONE_AT = 7000;
@@ -27,7 +24,7 @@ export default function Gate() {
   const start = () => {
     if (started.current) return;
     started.current = true;
-    window.dispatchEvent(new Event("invitation:open")); // starts the music (it needs to wait for a touch if the browser blocks sound)
+    window.dispatchEvent(new Event("invitation:open")); // this tap is the touch that lets the browser play the music
     setPhase("card"); // the doors swing
     document.documentElement.classList.add("revealed"); // the hero sequence plays behind the opening doors
     setTimeout(() => {
@@ -36,15 +33,6 @@ export default function Gate() {
       window.dispatchEvent(new Event("invitation:ready")); // the page is now free to scroll
     }, GATE_DONE_AT);
   };
-
-  // open on their own, a moment after everything has loaded
-  useEffect(() => {
-    let t: ReturnType<typeof setTimeout>;
-    const arm = () => { t = setTimeout(start, AUTO_OPEN_MS); };
-    if (document.readyState === "complete") arm(); else window.addEventListener("load", arm, { once: true });
-    return () => { clearTimeout(t); window.removeEventListener("load", arm); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (phase === "open") return null;
   const cardOpen = phase !== "closed";
@@ -111,11 +99,30 @@ export default function Gate() {
             </p>
           </div>
 
-          {/* the doors open on their own; tapping the door just opens them sooner */}
+          {/* the whole door is the button: a tap anywhere opens it. The plaque below the handles tells guests so. */}
           <button
-            type="button" onClick={start} aria-label="Open the invitation"
+            type="button" onClick={start} aria-label="Tap to open the invitation"
             className={`absolute inset-0 ${cardOpen ? "pointer-events-none" : "pointer-events-auto"}`}
-          />
+          >
+            <span
+              className="pointer-events-none absolute left-1/2 top-[57.5%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-opacity duration-500"
+              style={{ opacity: cardOpen ? 0 : 1 }}
+            >
+              {/* a finger that keeps tapping */}
+              <svg viewBox="0 0 24 24" aria-hidden className="tap-bob mb-1.5 h-14 w-14 drop-shadow-[0_2px_3px_rgba(0,0,0,.7)]" fill="#fff1c4" stroke="#5a1020" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.5 3.2a1.7 1.7 0 0 1 3.4 0v6.3h.4a1.8 1.8 0 0 1 2.3 1 1.8 1.8 0 0 1 2.4.9 1.8 1.8 0 0 1 2.2 1.7v3.2c0 3.6-2.5 6.4-6 6.4h-1.6c-2.2 0-3.7-.8-4.9-2.1l-3.3-3.5a1.7 1.7 0 0 1 2.4-2.4l1.8 1.5z" />
+              </svg>
+              <span className="relative">
+                <span className="tap-ring absolute inset-0 rounded-full border-2 border-[#f1d98a]" />
+                <span className="tap-ring absolute inset-0 rounded-full border-2 border-[#f1d98a]" style={{ animationDelay: "1.1s" }} />
+                <span className="tap-glow relative flex items-center gap-3 rounded-full border-2 border-[#f1d98a] bg-[linear-gradient(180deg,#7d1a30,#4a0c1c_55%,#2f0711)] px-6 py-3 shadow-[inset_0_0_0_3px_rgba(58,10,20,.9),inset_0_0_0_4px_rgba(241,217,138,.55)]">
+                  <span aria-hidden className="text-[11px] text-[#f1d98a]">&#10022;</span>
+                  <span className="whitespace-nowrap font-serif text-[16px] font-bold uppercase tracking-[.3em] text-[#fff3cf] [text-shadow:0_1px_2px_rgba(0,0,0,.8),0_0_10px_rgba(241,217,138,.55)]">Tap to open</span>
+                  <span aria-hidden className="text-[11px] text-[#f1d98a]">&#10022;</span>
+                </span>
+              </span>
+            </span>
+          </button>
           </div>
           </div>
         </div>

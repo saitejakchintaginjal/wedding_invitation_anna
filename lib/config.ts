@@ -2,7 +2,7 @@
 export const wedding = {
   groom: "SaiKiran",
   bride: "Asha",
-  groomParents: "Smt. Krishnaveni K C",
+  groomParents: ["Late Keshav N Chintaginjal", "Smt. Krishnaveni K Chintaginjal"], // one entry per line
   brideParents: ["Mr. RamMohan Butta", "Mrs. Laxmi Butta"], // one entry per line
   // ISO local time of the wedding muhurtam
   date: "2026-11-26T09:41:00",

@@ -80,9 +80,9 @@ function Welcome() {
         <p className="mt-1.5 font-serif text-[15px] leading-snug text-maroon-deep">
           With the blessings of Lord Ganesha and our elders, we joyfully invite you to share in the wedding of our children.
         </p>
-        <div className="mt-3 grid grid-cols-2 gap-2 border-t border-gold/30 pt-2.5 text-xs">
-          <div><p className="text-[10px] font-bold uppercase tracking-[.15em] text-gold-dark">Groom&apos;s family</p><p className="mt-0.5 font-serif text-sm font-bold leading-snug text-maroon-deep">{wedding.groomParents}</p></div>
-          <div><p className="text-[10px] font-bold uppercase tracking-[.15em] text-gold-dark">Bride&apos;s family</p><p className="mt-0.5 font-serif text-sm font-bold leading-snug text-maroon-deep">{wedding.brideParents.map((n) => <span key={n} className="block">{n}</span>)}</p></div>
+        <div className="mt-3 space-y-2.5 border-t border-gold/30 pt-2.5 text-xs">
+          <div><p className="text-[10px] font-bold uppercase tracking-[.15em] text-gold-dark">Groom&apos;s family</p><p className="mt-0.5 font-serif text-sm font-bold leading-snug text-maroon-deep">{wedding.groomParents.map((n) => <span key={n} className="block whitespace-nowrap">{n}</span>)}</p></div>
+          <div className="border-t border-gold/20 pt-2.5"><p className="text-[10px] font-bold uppercase tracking-[.15em] text-gold-dark">Bride&apos;s family</p><p className="mt-0.5 font-serif text-sm font-bold leading-snug text-maroon-deep">{wedding.brideParents.map((n) => <span key={n} className="block whitespace-nowrap">{n}</span>)}</p></div>
         </div>
       </ScrollReveal>
     </section>
