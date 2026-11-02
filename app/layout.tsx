@@ -7,9 +7,19 @@ const script = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--fon
 const display = Satisfy({ subsets: ["latin"], weight: "400", variable: "--font-display" });
 const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-sans" });
 
+// The picture/title/description WhatsApp, Facebook and others show when the link is shared. The cover picture comes from
+// app/opengraph-image.jpg and app/twitter-image.jpg. metadataBase makes its address absolute: Netlify provides URL at build
+// time (so a renamed site or custom domain is picked up automatically); set NEXT_PUBLIC_SITE_URL to override.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.URL ?? "http://localhost:3000";
+const title = "SaiKiran weds Asha - Wedding Invitation";
+const description = "With the blessings of our elders, we invite you to the wedding of SaiKiran & Asha on 26 November 2026 at Shri Venkataramana Temple, Sirsi.";
+
 export const metadata: Metadata = {
-  title: "SaiKiran & Asha - Wedding Invitation",
-  description: "You are invited to celebrate our wedding.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  openGraph: { type: "website", siteName: "SaiKiran weds Asha", locale: "en_IN", title, description },
+  twitter: { card: "summary_large_image", title, description },
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#fff7ea" };
 
