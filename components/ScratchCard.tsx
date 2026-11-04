@@ -52,7 +52,58 @@ export default function ScratchCard() {
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
   const moves = useRef(0);
+  const finger = useRef<HTMLDivElement>(null);
+  const autoStop = useRef(false); // set once the guest touches the card: the automatic scratching gives way to them
   const [done, setDone] = useState(false);
+
+  // When the card comes into view, a glowing "finger" zigzags across it and wipes the foil away by itself, then the date is revealed.
+  useEffect(() => {
+    const c = canvas.current;
+    if (!c || done) return;
+    let raf = 0, timer: ReturnType<typeof setTimeout> | undefined, started = false;
+    const run = () => {
+      if (started || autoStop.current) return;
+      started = true;
+      const ctx = c.getContext("2d");
+      const r = c.getBoundingClientRect();
+      if (!ctx) return;
+      // a zigzag of rows from the top of the heart to the bottom
+      const rows = 7, pts: [number, number][] = [];
+      for (let i = 0; i < rows; i++) {
+        const y = r.height * (0.1 + (0.78 * i) / (rows - 1));
+        const ltr = i % 2 === 0;
+        pts.push([r.width * (ltr ? 0.1 : 0.9), y], [r.width * (ltr ? 0.9 : 0.1), y]);
+      }
+      const lens = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+      const total = lens.reduce((a, b) => a + b, 0), DURATION = 2800;
+      const at = (d: number): [number, number] => {
+        let k = 0;
+        while (k < lens.length - 1 && d > lens[k]) { d -= lens[k]; k++; }
+        const f = Math.min(1, d / lens[k]);
+        return [pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f];
+      };
+      const t0 = performance.now();
+      let prev = pts[0];
+      const step = (now: number) => {
+        if (autoStop.current) { if (finger.current) finger.current.style.opacity = "0"; return; }
+        const p = Math.min(1, (now - t0) / DURATION);
+        const cur = at(total * p);
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.lineWidth = Math.max(18, r.width * 0.13);
+        ctx.lineCap = "round"; ctx.lineJoin = "round";
+        ctx.beginPath(); ctx.moveTo(prev[0], prev[1]); ctx.lineTo(cur[0], cur[1]); ctx.stroke();
+        prev = cur;
+        if (finger.current) { finger.current.style.opacity = "1"; finger.current.style.transform = `translate(${cur[0]}px, ${cur[1]}px)`; }
+        if (p < 1) { raf = requestAnimationFrame(step); return; }
+        if (finger.current) finger.current.style.opacity = "0";
+        setDone(true);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { timer = setTimeout(run, 500); io.disconnect(); } }, { threshold: 0.7 });
+    io.observe(c);
+    return () => { io.disconnect(); clearTimeout(timer); cancelAnimationFrame(raf); };
+  }, [done]);
 
   useEffect(() => {
     const c = canvas.current;
@@ -110,6 +161,7 @@ export default function ScratchCard() {
   };
 
   const down = (e: React.PointerEvent) => {
+    autoStop.current = true;
     canvas.current?.setPointerCapture(e.pointerId);
     drawing.current = true;
     last.current = null;
@@ -154,6 +206,11 @@ export default function ScratchCard() {
               <p className={`gold-text font-serif font-semibold leading-none transition-[font-size] ${done ? "reveal-pop text-[33cqw]" : "text-[22cqw]"}`} style={{ animationDelay: "0.7s" }}>{d}</p>
               <p className={`font-serif text-[7cqw] font-semibold uppercase tracking-[.2em] text-maroon-deep ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1s" }}>{MONTHS[m - 1]}</p>
               <p className={`font-serif text-[6cqw] tracking-[.3em] text-maroon ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1.2s" }}>{y}</p>
+            </div>
+
+            {/* the glowing fingertip that scratches by itself */}
+            <div ref={finger} aria-hidden className="pointer-events-none absolute left-0 top-0 z-10 opacity-0 transition-opacity duration-300">
+              <div className="-ml-[7cqw] -mt-[7cqw] h-[14cqw] w-[14cqw] rounded-full border-2 border-white/90 bg-white/35 shadow-[0_0_18px_rgba(255,255,255,.9)]" />
             </div>
 
             {/* the foil */}
