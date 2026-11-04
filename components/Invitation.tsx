@@ -97,7 +97,7 @@ function Welcome() {
               <span><CapName>{wedding.bride[0]}</CapName></span>
             </span>
           </div>
-          <p className="mt-u16 text-u11 uppercase tracking-[.3em] text-gold-dark">Together with their families</p>
+          
           <h2 className="gold-text pb-u4 font-script text-u64 leading-[1.2]">Welcome</h2>
           <p className="mt-u4 font-serif text-u19 leading-snug text-maroon-deep">
             With the blessings of Lord Ganesha and our elders, we joyfully invite you to share in the wedding of our children.

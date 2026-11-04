@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 const DWELL_MS = 4000;       // stay still this long at each slide
+const FIRST_MS = 2200;       // first page: ready fires at 7s, the names appear at ~8.2s, so start gliding ~1s after they show
 const IDLE_MS = 3500;        // after a touch / tap / scroll, wait this long before carrying on
 const SPEED = 70;            // glide speed, in pixels per second
 const MIN_GLIDE_MS = 2500;   // never glide faster than this, even over a short distance
@@ -53,14 +54,6 @@ export default function AutoScroll() {
 
     const goNext = () => {
       if (!ready || off || document.hidden) return;
-      // the opening music is still playing: stay on this page until it has finished
-      if (document.documentElement.dataset.intro === "playing") {
-        clearIntroWait();
-        onIntroEnd = () => { onIntroEnd = null; later(goNext, 600); };
-        window.addEventListener("invitation:intro-end", onIntroEnd, { once: true });
-        later(goNext, 20000);                           // safety net: never wait more than 20s
-        return;
-      }
       const from = window.scrollY;
       const target = stops().find((y) => y > from + 24);
       if (target == null) return;                       // already at the end
@@ -108,7 +101,7 @@ export default function AutoScroll() {
       if (document.hidden) { stopGlide(); clearTimeout(timer); } else later(resume, IDLE_MS);
     };
 
-    const begin = () => { if (ready) return; ready = true; later(goNext, DWELL_MS); };
+    const begin = () => { if (ready) return; ready = true; later(goNext, FIRST_MS); };
     // (goNext itself ignores calls once the guest has switched auto-scrolling off)
     if (document.documentElement.classList.contains("gate-done")) begin();
     window.addEventListener("invitation:ready", begin);
