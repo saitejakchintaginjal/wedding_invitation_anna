@@ -8,9 +8,10 @@ const display = Satisfy({ subsets: ["latin"], weight: "400", variable: "--font-d
 const sans = Jost({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-sans" });
 
 // The picture/title/description WhatsApp, Facebook and others show when the link is shared. The cover picture comes from
-// app/opengraph-image.jpg and app/twitter-image.jpg. metadataBase makes its address absolute: Netlify provides URL at build
-// time (so a renamed site or custom domain is picked up automatically); set NEXT_PUBLIC_SITE_URL to override.
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.URL ?? "http://localhost:3000";
+// app/opengraph-image.jpg and app/twitter-image.jpg. metadataBase makes its address absolute, so it must be the address
+// people actually share. Netlify's own URL variable points at a different site name (saikiranashaweddinginvitation), whose
+// image address 404s, so the address is fixed here; set NEXT_PUBLIC_SITE_URL to override it (e.g. for a custom domain).
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://saikiran-weds-asha.netlify.app";
 const title = "SaiKiran weds Asha - Wedding Invitation";
 const description = "With the blessings of our elders, we invite you to the wedding of SaiKiran & Asha on 26 November 2026 at Shri Venkataramana Temple, Sirsi.";
 
