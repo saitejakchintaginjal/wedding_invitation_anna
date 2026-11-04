@@ -14,8 +14,8 @@ export default function Page() {
       <MusicPlayer />
       <FlowerShower />
       <AutoScroll />
-      {/* phone-width column; on larger screens it sits centred like a card */}
-      <div className="walk mx-auto w-full max-w-[480px] overflow-hidden bg-[linear-gradient(180deg,#fff7ea_0%,#fbe9cd_50%,#fff7ea_100%)] shadow-2xl">
+      {/* a column up to 640px wide (phones fill it; tablets and desktops see it centred). Every section inside is one full-screen slide. */}
+      <div className="walk mx-auto w-full max-w-[640px] overflow-hidden bg-ivory shadow-2xl">
         <Invitation />
         <GardenFinale />
       </div>

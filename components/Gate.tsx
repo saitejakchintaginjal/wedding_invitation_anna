@@ -60,7 +60,7 @@ export default function Gate() {
   );
 
   return (
-    <div className="pointer-events-none fixed inset-y-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 overflow-hidden [container-type:size]">
+    <div className="pointer-events-none fixed inset-y-0 left-1/2 z-50 w-full max-w-[640px] -translate-x-1/2 overflow-hidden [container-type:size]">
       <div className="absolute inset-0 [perspective:1200px]" style={{ pointerEvents: phase === "closed" ? "auto" : "none" }}>
         {/* warm light behind the toran, seen through the doorway as the doors open */}
         <div className={`absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(255,241,201,.9)_0%,rgba(255,217,143,.7)_42%,rgba(227,160,75,.55)_100%)] ${cardOpen ? "curtain-pass" : ""}`} style={{ transformOrigin: "50% 50%" }} />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Slide from "./Slide";
 import { wedding } from "@/lib/config";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -9,8 +10,7 @@ const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 const [y, m, d] = wedding.date.slice(0, 10).split("-").map(Number);
 const weekday = DAYS[new Date(y, m - 1, d).getDay()];
 
-const BRUSH = 26;
-/** twinkles that appear around the heart once the date is revealed (positions inside the 200px heart box) */
+/** twinkles that appear around the heart once the date is revealed (x/y/size are measured on a 200px-wide heart and scaled to its real size) */
 const SPARKLES = [{ x: -14, y: 20, s: 16 }, { x: 196, y: 10, s: 20 }, { x: 214, y: 92, s: 12 }, { x: -22, y: 104, s: 12 }, { x: 28, y: -14, s: 12 }, { x: 150, y: 176, s: 14 }];
 const REVEAL_AT = 0.5; // fraction scratched before the rest melts away
 
@@ -37,11 +37,11 @@ function paintFoil(canvas: HTMLCanvasElement) {
   ctx.shadowColor = "rgba(255,247,200,.9)";
   ctx.shadowBlur = 0;
   ctx.shadowOffsetY = 1;
-  const script = getComputedStyle(canvas).getPropertyValue("--font-script").trim() || "cursive";
+  const script = getComputedStyle(canvas).getPropertyValue("--font-display").trim() || "cursive";
   ctx.fillStyle = "#6b1220";
-  ctx.font = `${Math.round(w * 0.13)}px ${script}, cursive`;
+  ctx.font = `${Math.round(w * 0.115)}px ${script}, cursive`;
   ctx.fillText("Scratch to reveal", w / 2, h * 0.38);
-  ctx.font = `${Math.round(w * 0.15)}px ${script}, cursive`;
+  ctx.font = `${Math.round(w * 0.14)}px ${script}, cursive`;
   ctx.fillText("the Date", w / 2, h * 0.53);
   ctx.shadowColor = "transparent";
 }
@@ -98,7 +98,7 @@ export default function ScratchCard() {
     const p = point(e);
     const from = last.current ?? p;
     ctx.globalCompositeOperation = "destination-out";
-    ctx.lineWidth = BRUSH;
+    ctx.lineWidth = Math.max(18, canvas.current!.getBoundingClientRect().width * 0.13); // the finger-sized brush grows with the heart
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -121,11 +121,12 @@ export default function ScratchCard() {
   };
 
   return (
-    <section id="save-the-date" className="px-5 pt-10" data-autoscroll-skip>
-      <div className="mb-4 text-center">
-        <p className="text-[11px] font-medium uppercase tracking-[.4em] text-gold-dark">A little surprise</p>
-        <h2 className="mt-1 font-serif text-3xl font-semibold text-maroon-deep">Save the Date</h2>
-        <div className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-gold to-transparent" />
+    <Slide id="save-the-date" tone="ivory">
+      <div className="mb-u28 text-center">
+        <h2 className="font-serif text-u38 font-semibold leading-tight text-maroon-deep">Save the Date</h2>
+        <div className="mx-auto mt-u10 flex items-center justify-center gap-u8 text-gold">
+          <span className="h-px w-u44 bg-gradient-to-r from-transparent to-gold" /><span aria-hidden className="text-u9">&#10022;</span><span className="h-px w-u44 bg-gradient-to-l from-transparent to-gold" />
+        </div>
       </div>
 
       {/* the heart outline is one shared clip path, so each layer below stays heart-shaped as it is inset */}
@@ -135,23 +136,24 @@ export default function ScratchCard() {
         </clipPath>
       </svg>
 
+      {/* every size inside the heart is in cqw (a share of the heart's own width), so it looks the same at any screen size */}
       <div
-        className="relative mx-auto w-[200px] origin-top transition-[transform,margin] duration-[1100ms] ease-[cubic-bezier(.34,1.45,.5,1)] [filter:drop-shadow(0_14px_16px_rgba(90,30,20,.35))]"
-        style={{ transform: done ? "scale(1.3)" : "none", marginBottom: done ? 58 : 0 }}
+        className="relative w-u280 origin-top transition-[transform,margin] duration-[1100ms] ease-[cubic-bezier(.34,1.45,.5,1)] [container-type:inline-size] [filter:drop-shadow(0_14px_16px_rgba(90,30,20,.35))]"
+        style={{ transform: done ? "scale(1.3)" : "none", marginBottom: done ? "calc(var(--u) * 78)" : 0 }}
       >
         {done && SPARKLES.map((p, i) => (
-          <span key={i} aria-hidden className="sparkle pointer-events-none absolute text-gold" style={{ left: p.x, top: p.y, fontSize: p.s, animationDelay: `${0.5 + i * 0.22}s` }}>&#10022;</span>
+          <span key={i} aria-hidden className="sparkle pointer-events-none absolute text-gold" style={{ left: `${p.x / 2}%`, top: `${p.y / 2}cqw`, fontSize: `${p.s / 2}cqw`, animationDelay: `${0.5 + i * 0.22}s` }}>&#10022;</span>
         ))}
         <div className="relative aspect-[1/.92] [clip-path:url(#scratch-heart)]">
           <div className="absolute inset-0 bg-gradient-to-br from-gold-light via-gold to-gold-dark" />
           <div className="absolute inset-[2.5%] bg-ivory [clip-path:url(#scratch-heart)]" />
           <div ref={wrap} className="absolute inset-[5%] bg-gradient-to-br from-cream to-[#fbe3b8] [clip-path:url(#scratch-heart)]">
             {/* the prize underneath */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pb-5 pt-2 text-center">
-              <p className={`text-[8px] uppercase tracking-[.35em] text-gold-dark ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "0.55s" }}>{weekday}</p>
-              <p className={`gold-text font-serif font-semibold leading-none transition-[font-size] ${done ? "reveal-pop text-[66px]" : "text-[44px]"}`} style={{ animationDelay: "0.7s" }}>{d}</p>
-              <p className={`font-serif text-sm font-semibold uppercase tracking-[.2em] text-maroon-deep ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1s" }}>{MONTHS[m - 1]}</p>
-              <p className={`font-serif text-xs tracking-[.3em] text-maroon ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1.2s" }}>{y}</p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pb-[10cqw] pt-[4cqw] text-center">
+              <p className={`text-[4cqw] uppercase tracking-[.35em] text-gold-dark ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "0.55s" }}>{weekday}</p>
+              <p className={`gold-text font-serif font-semibold leading-none transition-[font-size] ${done ? "reveal-pop text-[33cqw]" : "text-[22cqw]"}`} style={{ animationDelay: "0.7s" }}>{d}</p>
+              <p className={`font-serif text-[7cqw] font-semibold uppercase tracking-[.2em] text-maroon-deep ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1s" }}>{MONTHS[m - 1]}</p>
+              <p className={`font-serif text-[6cqw] tracking-[.3em] text-maroon ${done ? "reveal-pop" : ""}`} style={{ animationDelay: "1.2s" }}>{y}</p>
             </div>
 
             {/* the foil */}
@@ -167,7 +169,7 @@ export default function ScratchCard() {
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center text-[11px] uppercase tracking-[.3em] text-maroon/70">{done ? "See you there ♥" : "Use your finger to scratch"}</p>
-    </section>
+      <p className="mt-u20 text-center text-u13 uppercase tracking-[.3em] text-maroon/70">{done ? "See you there ♥" : "Use your finger to scratch"}</p>
+    </Slide>
   );
 }

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-const WORDS = ["weds", "vs", "weds", "♥"];
+const WORDS = ["weds", "♥"];
 
-/** Cycles weds → vs → weds → ♥ once a second with a card-flip. */
+/** Alternates weds ↔ ♥ once a second with a card-flip. */
 export default function FlipWord({ className = "" }: { className?: string }) {
   const [i, setI] = useState(0);
   useEffect(() => {

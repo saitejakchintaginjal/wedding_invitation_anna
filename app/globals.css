@@ -2,8 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* One fluid unit for the whole page: 1 --u = 1px on a 390x844 phone. It is the largest size at which a 390x844 layout still fits
+   inside the screen's width (capped at the 640px column) and height, so every slide fits one screen on any phone or tablet.
+   The floor keeps text readable when a phone is turned sideways (the slide then simply grows taller than the screen). */
+:root { --u: max(0.62px, min(calc(min(100vw, 640px) / 390), calc(100vh / 844))); }
+@supports (height: 100svh) { :root { --u: max(0.62px, min(calc(min(100vw, 640px) / 390), calc(100svh / 844))); } }
+
 html { background: #fff7ea; }
 body { color: #3d0a14; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+
+/* ---- slides: each section is one full screen with its own background, so only that section is in view when it is rested on ---- */
+.slide { min-height: 100vh; min-height: 100svh; }
+.slide-ivory { background: linear-gradient(180deg, #fffaf0 0%, #fdf0d9 100%); }
+.slide-sand  { background: radial-gradient(ellipse at 50% 42%, #fdecce 0%, #f7dfb4 100%); }
+.slide-blush { background: linear-gradient(180deg, #fff4ec 0%, #fbe3d3 100%); }
 
 .gold-text {
   background: linear-gradient(135deg, #c9962b, #9a6f12 45%, #7a1030);
@@ -139,3 +151,21 @@ html.revealed .bell { animation: bellSwing var(--dur, 3.4s) linear var(--bd, 0s)
   .curtain-pass { opacity: 0; }
   .sr { opacity: 1; transform: none; transition: none; }
 }
+
+
+/* Slide ornaments: hanging bells, turning lotus, twinkling sparkles */
+.orn-sway { transform-origin: 50% 0; animation: orn-sway 4.2s ease-in-out infinite; }
+.orn-spin { animation: orn-spin 70s linear infinite; }
+.orn-twinkle { animation: orn-twinkle 3s ease-in-out infinite; }
+@keyframes orn-sway { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+@keyframes orn-spin { from { transform: translateX(-50%) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg); } }
+@keyframes orn-twinkle { 0%, 100% { opacity: .15; transform: scale(.7); } 50% { opacity: .95; transform: scale(1.2); } }
+@media (prefers-reduced-motion: reduce) { .orn-sway, .orn-spin, .orn-twinkle { animation: none; } }
+
+.orn-sway-g { transform-box: fill-box; transform-origin: 50% 0; animation: orn-sway-s 4.4s ease-in-out infinite; }
+@keyframes orn-sway-s { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@media (prefers-reduced-motion: reduce) { .orn-sway-g { animation: none; } }
+
+.orn-clapper { transform-box: fill-box; transform-origin: 50% 0; animation: orn-clap 2.2s ease-in-out infinite; }
+@keyframes orn-clap { 0%, 100% { transform: rotate(10deg); } 50% { transform: rotate(-10deg); } }
+@media (prefers-reduced-motion: reduce) { .orn-clapper { animation: none; } }

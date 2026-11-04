@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 
-const DWELL_MS = 4000;       // stay still this long at each section
+const DWELL_MS = 4000;       // stay still this long at each slide
 const IDLE_MS = 3500;        // after a touch / tap / scroll, wait this long before carrying on
 const SPEED = 70;            // glide speed, in pixels per second
 const MIN_GLIDE_MS = 2500;   // never glide faster than this, even over a short distance
 const MAX_GLIDE_MS = 16000;
 const MAX_STOPS = 3;         // after the guest has stopped it this many times, it stays off for good
 
-/** Pages through the invitation on its own: rest at each section, glide slowly to the next, repeat. Any touch, tap, wheel or
+/** Pages through the invitation on its own: rest at each slide, glide slowly to the next, repeat. Any touch, tap, wheel or
  *  key press stops it at once; it carries on from where the guest left off after IDLE_MS with no interaction. Starts when the
  *  entrance doors have cleared (the Gate fires "invitation:ready"). */
 export default function AutoScroll() {
@@ -22,34 +22,22 @@ export default function AutoScroll() {
 
     const maxY = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
-    /** Every place worth resting at: the top of each section, plus extra stops inside sections taller than the screen. */
+    /** Every place worth resting at: the top of each slide (so only that slide is on screen), plus screen-sized steps inside a slide
+     *  that is taller than the screen (a phone turned sideways, for instance), and the very bottom of the page. */
     const stops = () => {
       const vh = window.innerHeight, top = window.scrollY, limit = maxY();
-      const blocks = Array.from(document.querySelectorAll<HTMLElement>("main section, main footer")).filter((el) => !el.querySelector("section") && !el.hasAttribute("data-autoscroll-skip")); // sections marked data-autoscroll-skip are scrolled past, never rested at
-      // places a section asks for explicitly (data-autoscroll-stop), e.g. a photo that should get its own pause
-      // the value is how far above the element to rest, as a fraction of the screen height (empty = 40px)
-      const marked = Array.from(document.querySelectorAll<HTMLElement>("[data-autoscroll-stop]")).map((el) => {
-        const f = parseFloat(el.dataset.autoscrollStop || "");
-        const elTop = el.getBoundingClientRect().top + top;
-        let y = elTop - (f > 0 ? f * vh : 40);
-        // data-autoscroll-until="#id": also bring the bottom of that element into view, scrolling further if the screen is short
-        // (but never so far that more than 120px of the top of this element is cut off)
-        const end = el.dataset.autoscrollUntil ? document.querySelector(el.dataset.autoscrollUntil) : null;
-        if (end) y = Math.min(Math.max(y, end.getBoundingClientRect().bottom + top - vh + 16), elTop + 120);
-        return y;
-      });
-      const ys: number[] = [0, ...marked];
-      blocks.forEach((el, i) => {
+      const slides = Array.from(document.querySelectorAll<HTMLElement>("[data-slide]"));
+      const ys: number[] = [0];
+      slides.forEach((el) => {
         const r = el.getBoundingClientRect();
-        const y0 = r.top + top - 14, h = r.height;
+        const y0 = r.top + top;
         ys.push(y0);
-        // a long section is shown in screen-sized steps so none of it goes by unseen (skipping any step that lands next to a marked stop)
-        for (let y = y0 + vh * 0.82; y < y0 + h - vh * 0.45; y += vh * 0.82) if (marked.every((m) => Math.abs(m - y) > vh * 0.4)) ys.push(y);
-        if (i === blocks.length - 1) ys.push(limit);
+        for (let y = y0 + vh * 0.85; y < y0 + r.height - vh * 0.35; y += vh * 0.85) ys.push(y);
       });
+      ys.push(limit);
       const out: number[] = [];
       ys.map((y) => Math.min(limit, Math.max(0, Math.round(y)))).sort((a, b) => a - b).forEach((y) => {
-        if (!out.length || y - out[out.length - 1] > 80) out.push(y);
+        if (!out.length || y - out[out.length - 1] > 60) out.push(y);
       });
       return out;
     };

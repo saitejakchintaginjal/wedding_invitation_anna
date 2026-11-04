@@ -1,9 +1,16 @@
 import type { Config } from "tailwindcss";
 
+/** Fluid sizes: u12 = calc(var(--u) * 12). --u is 1px on a 390x844 phone and grows/shrinks to fit any screen (see globals.css). */
+const scale = (max: number) => Object.fromEntries(Array.from({ length: max }, (_, i) => [`u${i + 1}`, `calc(var(--u) * ${i + 1})`]));
+
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      spacing: scale(720),
+      fontSize: scale(120),
+      borderRadius: scale(60),
+      maxWidth: scale(720),
       colors: {
         night: { DEFAULT: "#120620", plum: "#2a0a3a" },
         ruby: "#b3122e",

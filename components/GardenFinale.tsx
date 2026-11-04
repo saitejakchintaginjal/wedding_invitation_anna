@@ -3,6 +3,7 @@
 import CapName from "./CapName";
 import Celebrations from "./Celebrations";
 import Countdown from "./Countdown";
+import Slide from "./Slide";
 import { SectionTitle } from "./Reveal";
 import { events, venues, wedding } from "@/lib/config";
 
@@ -30,56 +31,56 @@ function share() {
 }
 
 export default function GardenFinale() {
-  const btn = "rounded-full px-6 py-3.5 text-xs font-medium";
+  const btn = "rounded-full px-u22 py-u13 text-u12 font-medium";
 
   return (
-    <section className="space-y-12 px-5 pb-12 pt-12">
+    <>
       <Countdown />
 
       <Celebrations />
 
-      <section>
+      <Slide tone="blush">
         <SectionTitle eyebrow="Where" title="The Venues" />
-        <div className="space-y-2.5">
+        <div className="w-full space-y-u18">
           {venues.map((v) => {
             const vq = encodeURIComponent(v.query);
             return (
-              <div key={v.query} className="glass overflow-hidden rounded-2xl p-2 text-center">
-                <p className="text-[9px] uppercase tracking-[.3em] text-gold-dark">{v.event}</p>
-                <p className="font-serif text-base leading-tight text-maroon-deep">{v.name}</p>
-                <p className="mb-1.5 text-[11px] text-maroon/80">{v.address}</p>
+              <div key={v.query} className="glass overflow-hidden rounded-u26 p-u14 text-center">
+                <p className="text-u10 uppercase tracking-[.3em] text-gold-dark">{v.event}</p>
+                <p className="font-serif text-u23 leading-tight text-maroon-deep">{v.name}</p>
+                <p className="mb-u10 text-u14 text-maroon/80">{v.address}</p>
                 <iframe
                   title={`Map of ${v.name}`}
                   src={`https://www.google.com/maps?q=${vq}&output=embed`}
-                  className="h-20 w-full rounded-lg border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                  className="h-u150 w-full rounded-u16 border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                 />
-                <a href={`https://www.google.com/maps/search/?api=1&query=${vq}`} target="_blank" rel="noopener noreferrer" className="gold-btn mt-2 inline-block rounded-full px-4 py-1.5 text-[9px] font-medium">OPEN IN GOOGLE MAPS</a>
+                <a href={`https://www.google.com/maps/search/?api=1&query=${vq}`} target="_blank" rel="noopener noreferrer" className="gold-btn mt-u12 inline-block rounded-full px-u20 py-u10 text-u12 font-medium">OPEN IN GOOGLE MAPS</a>
               </div>
             );
           })}
         </div>
-      </section>
+      </Slide>
 
-      <section>
+      <Slide tone="sand" mandala>
         <SectionTitle eyebrow="Keep it close" title="Save & Share" />
-        <div className="glass rounded-3xl p-5 text-center">
-          <p className="font-serif text-lg text-maroon-deep">{events.map((e) => e.name).join(" · ")}</p>
-          <p className="mt-1 text-sm text-maroon/80">Tell family and friends, and add the dates to your calendar.</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-3">
+        <div className="glass w-full rounded-u30 p-u28 text-center">
+          <p className="font-serif text-u22 text-maroon-deep">{events.map((e) => e.name).join(" · ")}</p>
+          <p className="mt-u8 text-u15 leading-snug text-maroon/80">Tell family and friends, and add the dates to your calendar.</p>
+          <div className="mt-u18 flex flex-wrap justify-center gap-u12">
             <a href={calendarHref()} download="wedding.ics" className={`gold-btn ${btn}`}>ADD TO CALENDAR</a>
             <button type="button" onClick={share} className={`${btn} border border-gold-dark/70 tracking-[.2em] text-maroon-deep`}>SHARE INVITE</button>
           </div>
         </div>
-      </section>
 
-      <footer className="text-center">
-        <p className="flex items-center justify-center gap-1.5 whitespace-nowrap pt-5 font-script text-[clamp(30px,10.5vw,48px)] leading-[1.5]">
-          <span className="gold-text px-1 pt-2"><CapName>{wedding.groom}</CapName></span>
-          <span className="text-[.7em] text-ruby drop-shadow-[0_2px_4px_rgba(179,18,46,.35)]" aria-label="and">♥</span>
-          <span className="gold-text px-1 pt-2"><CapName>{wedding.bride}</CapName></span>
-        </p>
-        <p className="mt-2 text-xs font-medium uppercase tracking-[.3em] text-maroon">With love, always</p>
-      </footer>
-    </section>
+        <footer className="mt-u44 text-center">
+          <p className="flex items-center justify-center gap-u6 whitespace-nowrap pt-u4 font-script text-u42 leading-[1.5]">
+            <span className="gold-text px-u4 pt-u8"><CapName>{wedding.groom}</CapName></span>
+            <span className="text-[.7em] text-ruby drop-shadow-[0_2px_4px_rgba(179,18,46,.35)]" aria-label="and">♥</span>
+            <span className="gold-text px-u4 pt-u8"><CapName>{wedding.bride}</CapName></span>
+          </p>
+          <p className="mt-u6 text-u12 font-medium uppercase tracking-[.3em] text-maroon">With love, always</p>
+        </footer>
+      </Slide>
+    </>
   );
 }
