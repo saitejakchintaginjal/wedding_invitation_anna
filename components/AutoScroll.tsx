@@ -19,6 +19,7 @@ export default function AutoScroll() {
     let raf = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let gliding = false;
+    let quietUntil = 0;
     let lastSet = -1;   // where our own last scroll put the page, so we can tell our scrolling from the guest's
 
     const maxY = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -65,9 +66,10 @@ export default function AutoScroll() {
         if (!gliding) return;
         const p = Math.min(1, (now - t0) / ms);
         lastSet = from + dist * ease(p);
-        window.scrollTo({ top: lastSet, behavior: "instant" as ScrollBehavior });
+        window.scrollTo(0, lastSet);   // plain form: older iPhones (before iOS 15.4) reject behavior:"instant" and would stop here
         if (p < 1) { raf = requestAnimationFrame(step); return; }
         gliding = false;
+        quietUntil = performance.now() + 600;           // iPhone reports our own scrolling a moment late; don't mistake that for a guest
         later(goNext, DWELL_MS);                        // rest here before moving on
       };
       raf = requestAnimationFrame(step);
@@ -92,6 +94,7 @@ export default function AutoScroll() {
     // a scroll we did not cause (finger drag, fling, scrollbar, keyboard) counts as interaction too
     const onScroll = () => {
       if (!ready || off) return;
+      if (gliding || performance.now() < quietUntil) return;   // our own scrolling (Safari on iPhone delivers these events late)
       if (Math.abs(window.scrollY - lastSet) < 2.5) return;
       interrupted();
     };
